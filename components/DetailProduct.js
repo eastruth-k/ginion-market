@@ -18,7 +18,7 @@ export default function ProductCard({ product }) {
           </span>
 
           <span className="product-emoji">
-            {product.image}
+            {product.imagePlaceholder}
           </span>
 
         </div>
@@ -36,23 +36,30 @@ export default function ProductCard({ product }) {
 
           <div className="price">
             <strong>
-              {product.price.toLocaleString()}원
+              {product.currentPrice.toLocaleString()}원
             </strong>
 
             <del>
-              {product.originalPrice.toLocaleString()}원
+              {product.initialPrice.toLocaleString()}원
             </del>
           </div>
 
           <div className="next-decrease">
             🕐 다음 썰림{" "}
-            <strong>{product.nextDecrease}</strong>
+            <strong>
+              {product.nextAdjustmentAt.toLocaleString("ko-KR", {
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit",
+              })}
+            </strong>
           </div>
 
           <div className="next-price">
-            <span>다음가</span>
+            <span>최저가</span>
             <strong>
-              {product.nextPrice.toLocaleString()}원
+              {product.minimumPrice.toLocaleString()}원
             </strong>
           </div>
 
