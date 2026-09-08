@@ -1,34 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 서비스 소개
+project: 대파마켓 
 
-## Getting Started
+대파마켓은 중고거래에서 발생하는 반복적인 가격 협상을 줄이고,
+판매자가 설정한 가격 정책에 따라 상품 가격이 시간에 맞춰 자동으로 내려가는 중고거래 서비스.
 
-First, run the development server:
+대파마켓은 판매자가 상품을 등록할 때, 가격 정책을 미리 설정한다.
+- 판매 시작 가격
+- 최소 판매 가격
+- 가격 인하 금액
+- 가격 인하 주기
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 로그인/회원가입
+이메일과 비밀번호를 입력하여 서비스 이용 할 수 있다. 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+입력 정보: 닉네임, 이메일, 비밀번호, 주소, 프로필 이미지
+중점사항: 필수 입력값 검증, 이메일 중복 확인, 비밀번호 유효성 검사, 회원가입 성공/실패 처리
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 메인 페이지
+자동 가격 인하 시스템으 직관적으로 이해할 수 있어야 한다.
 
-## Learn More
+- 인기상품(사용자가 관심가지는 상품 view, click)
+- 곧 썰리는 상품(가격이 내려가고 거래가 임박했을 때) 
 
-To learn more about Next.js, take a look at the following resources:
+서비스 컨셉을 이해하고, 상품 탐색까지 자연스러운 이동
+현재 가격 변동 강조
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 상품 등록 페이지 
+판매자가 상품과 가격 정책을 등록한다. 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+상품정보: 상품이미지, 상품명, 카테고리, 상품 설명, 거래 지역
+가격 정책: 판매 시작 가격, 최소 판매 가격, 가격 인하 금액, 가격 인하 주기
 
-## Deploy on Vercel
+## 상품 상세 페이지 
+구매자가 상품 정보를 확인하고 가격 변동 상황을 파악한 후 구매할 수 있다.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+정보: 상품이미지, 상품명, 카테고리, 상품 설명, 거래 지역, 판매 시작 가격, 최소 판매 가격, 상품 상태
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 상품 검색 페이지
+상품 목록 검색은 원하는 조건으로 상품을 검색할 수 있는 기능이다.
+
+왼편에 카테고리를 선택할 수 있게 하고 지역과, 가격대도 조건으로 지정할 수 있다.
+정렬은 최신순, 등록일 순, 낮은 가격순, 높은 가격순, 관심 많은 순, 많이 썰린 순(최초 가격 대비 할인율이 큰 상품), 시장가 대비 저렴한 순(유사 상품 시세보다 현재 가격이 낮은 상품)으로 할 수 있게 한다.
+
+
+## 마이페이지
+마이페이지에는 내 활동, 판매관리, 구매내역, 관심상품, 설정과 같은 하위 기능이 있다.
+
+내 활동 : 에는 판매하고 있는 상품 개요, 구매한 상품 개요, 관심상품 개요를 간단히 보여준다
+판매 관리 : 판매하고 있는 상품의 리스트를 보여준다.
+구매내역 : 구매를 한 상품의 리스트를 보여준다.
+설정 : 하위 메뉴로 프로필 수정(닉네임, 프로필 이미지, 거래지역, 주소), 거래 설정(기본 거래 지역, 채팅 가능 시간), 계정 설정(비밀번호 변경, 로그아웃, 회원탈퇴)
+
+ 
+// 프롬프트는 여기에 작성
