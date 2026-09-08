@@ -1,9 +1,12 @@
 import Link from "next/link";
+import { connection } from "next/server";
 import Header from "@/components/Header";
 import DetailProduct from "@/components/DetailProduct";
 import { products } from "@/scripts/seeds";
 
-export default function Home() {
+export default async function Home() {
+  await connection();
+
   const popularProducts = products.slice(0, 4);
   const soonProducts = products.slice(4, 8);
 
