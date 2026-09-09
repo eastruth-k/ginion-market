@@ -2,19 +2,21 @@ import Link from "next/link";
 import { connection } from "next/server";
 import Header from "@/components/Header";
 import DetailProduct from "@/components/DetailProduct";
-import { products } from "@/scripts/seeds";
+import { getPopularProducts, getSoonProducts } from "@/lib/products";
 
 export default async function Home() {
   await connection();
 
-  const popularProducts = products.slice(0, 4);
-  const soonProducts = products.slice(4, 8);
+  const [popularProducts, soonProducts] = await Promise.all([
+    getPopularProducts(),
+    getSoonProducts(),
+  ]);
 
   return (
     <>
       <Header />
 
-      <main>
+      <main className="page-container">
 
         {/* =========================
             메인 배너
@@ -80,7 +82,7 @@ export default async function Home() {
 
             {popularProducts.map((product) => (
               <DetailProduct
-                key={product.id}
+                key={product._id.toString()}
                 product={product}
               />
             ))}
@@ -115,7 +117,7 @@ export default async function Home() {
 
             {soonProducts.map((product) => (
               <DetailProduct
-                key={product.id}
+                key={product._id.toString()}
                 product={product}
               />
             ))}

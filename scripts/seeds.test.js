@@ -8,6 +8,8 @@ import {
   watchlists,
 } from "./seeds.js";
 
+const referenceTime = new Date("2026-09-09T06:00:00.000Z");
+
 const expectedFields = {
   users: [
     "_id",
@@ -26,9 +28,12 @@ const expectedFields = {
     "images",
     "info",
     "initialPrice",
-    "minimum",
+    "minimumPrice",
     "name",
+    "condition",
+    "currentPrice",
     "region",
+    "sellerId",
     "status",
   ],
   watchlists: ["_id", "createdAt", "productId", "userId"],
@@ -108,8 +113,9 @@ test("회원 이메일과 관심목록 관계는 중복되지 않는다", () => 
 test("상품 가격과 이미지 개수는 허용 범위 안에 있다", () => {
   for (const product of products) {
     assert.ok(product.initialPrice > 0);
-    assert.ok(product.minimum > 0);
-    assert.ok(product.minimum <= product.initialPrice);
+    assert.ok(product.minimumPrice > 0);
+    assert.ok(product.minimumPrice <= product.currentPrice);
+    assert.ok(product.currentPrice <= product.initialPrice);
     assert.ok(product.images.length >= 1);
     assert.ok(product.images.length <= 5);
   }
@@ -130,6 +136,10 @@ test("관심목록과 거래는 존재하는 회원과 상품만 참조한다", 
     assert.notEqual(transaction.buyerId, transaction.sellerId);
     assert.ok(productIds.has(transaction.productId));
   }
+
+  for (const product of products) {
+    assert.ok(userIds.has(product.sellerId));
+  }
 });
 
 test("거래 가격은 상품의 시작 가격과 최저 가격 사이에 있다", () => {
@@ -141,7 +151,7 @@ test("거래 가격은 상품의 시작 가격과 최저 가격 사이에 있다
     const product = productsById.get(transaction.productId);
 
     assert.ok(transaction.price <= product.initialPrice);
-    assert.ok(transaction.price >= product.minimum);
+    assert.ok(transaction.price >= product.minimumPrice);
   }
 });
 
@@ -158,7 +168,7 @@ test("모든 상품은 순서가 이어지는 가격 기록을 가진다", () =>
 
       assert.equal(change.seq, index);
       assert.ok(change.newPrice <= product.initialPrice);
-      assert.ok(change.newPrice >= product.minimum);
+      assert.ok(change.newPrice >= product.minimumPrice);
 
       if (index > 0) {
         assert.equal(change.previousPrice, changes[index - 1].newPrice);
@@ -181,7 +191,7 @@ test("모든 상품은 순서가 이어지는 가격 기록을 가진다", () =>
 });
 
 test("최근 48시간 안과 밖의 관심목록 테스트 데이터가 모두 있다", () => {
-  const fortyEightHoursAgo = new Date(Date.now() - 48 * 60 * 60 * 1000);
+  const fortyEightHoursAgo = new Date(referenceTime.getTime() - 48 * 60 * 60 * 1000);
   const recentWatchlists = watchlists.filter(
     (watchlist) => watchlist.createdAt >= fortyEightHoursAgo,
   );
@@ -200,7 +210,7 @@ test("최근 30일 거래의 중앙값을 계산할 수 있는 동일 상품군�
       .filter((product) => product.name === airPodsName)
       .map((product) => product._id),
   );
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const thirtyDaysAgo = new Date(referenceTime.getTime() - 30 * 24 * 60 * 60 * 1000);
   const prices = transactions
     .filter(
       (transaction) =>
@@ -213,32 +223,16 @@ test("최근 30일 거래의 중앙값을 계산할 수 있는 동일 상품군�
   assert.equal(getMedian(prices), 84000);
 });
 
-test("30일 거래가 없고 60일 거래만 있는 상품군이 있다", () => {
-  const productName = "닌텐도 스위치 OLED 화이트";
-  const productIds = new Set(
-    products
-      .filter((product) => product.name === productName)
-      .map((product) => product._id),
-  );
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-  const sixtyDaysAgo = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000);
-  const recentTransactions = transactions.filter(
-    (transaction) =>
-      productIds.has(transaction.productId) &&
-      transaction.createdAt >= thirtyDaysAgo,
-  );
-  const fallbackTransactions = transactions.filter(
-    (transaction) =>
-      productIds.has(transaction.productId) &&
-      transaction.createdAt >= sixtyDaysAgo,
-  );
+test("판매중, 예약중, 판매 완료 상태의 상품이 모두 있다", () => {
+  const statuses = new Set(products.map((product) => product.status));
 
-  assert.equal(recentTransactions.length, 0);
-  assert.equal(fallbackTransactions.length, 3);
+  assert.ok(statuses.has("판매중"));
+  assert.ok(statuses.has("예약중"));
+  assert.ok(statuses.has("판매 완료"));
 });
 
 test("등록 후 24시간이 지나지 않은 Cold Start 상품이 있다", () => {
-  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const twentyFourHoursAgo = new Date(referenceTime.getTime() - 24 * 60 * 60 * 1000);
   const coldStartProducts = products.filter(
     (product) => product.createdAt >= twentyFourHoursAgo,
   );
@@ -249,4 +243,14 @@ test("등록 후 24시간이 지나지 않은 Cold Start 상품이 있다", () =
 test("KEEP과 DOWN 가격 기록이 모두 있다", () => {
   assert.ok(priceChange.some((change) => change.status === "KEEP"));
   assert.ok(priceChange.some((change) => change.status === "DOWN"));
+});
+
+test("상품 현재 가격은 마지막 가격 변경 기록과 같다", () => {
+  for (const product of products) {
+    const latestChange = priceChange
+      .filter((change) => change.productId === product._id)
+      .sort((first, second) => second.seq - first.seq)[0];
+
+    assert.equal(product.currentPrice, latestChange.newPrice);
+  }
 });

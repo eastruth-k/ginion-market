@@ -1,6 +1,13 @@
 import Link from "next/link";
+import { headers } from "next/headers";
+import { connection } from "next/server";
+import { signOut } from "@/app/auth-actions";
+import { auth } from "@/lib/auth";
 
-export default function Header() {
+export default async function Header() {
+  await connection();
+  const session = await auth.api.getSession({ headers: await headers() });
+
   return (
     <header className="site-header">
       <div className="header-inner">
@@ -25,13 +32,17 @@ export default function Header() {
           <Link href="/">홈</Link>
           <Link href="/products">상품</Link>
           <Link href="/my-board">내 도마</Link>
-          <Link href="/mypage">마이페이지</Link>
+          {session ? <Link href="/mypage">{session.user.name}</Link> : <Link href="/login">로그인</Link>}
         </nav>
 
         {/* 상품 등록 */}
-        <Link href="/products/new" className="register-button">
-          상품 등록
-        </Link>
+        {session ? (
+          <form action={signOut} className="signout-form">
+            <button type="submit">로그아웃</button>
+          </form>
+        ) : (
+          <Link href="/signup" className="register-button">회원가입</Link>
+        )}
 
       </div>
     </header>
