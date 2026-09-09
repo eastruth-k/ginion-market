@@ -1,7 +1,11 @@
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import Image from "next/image";
+import { headers } from "next/headers";
+import { changeWatchlist } from "@/app/watchlist-actions";
+import { auth } from "@/lib/auth";
 import { getProductById } from "@/lib/products";
+import { hasWatchlist } from "@/lib/watchlists";
 
 export default async function ProductDetailPage({ params }) {
   await connection();
@@ -12,6 +16,8 @@ export default async function ProductDetailPage({ params }) {
   if (!result) notFound();
 
   const { product, seller, priceChanges, watchCount } = result;
+  const session = await auth.api.getSession({ headers: await headers() });
+  const watched = session ? await hasWatchlist(session.user.id, id) : false;
   const totalDiscountRate = Math.round(
     (1 - product.currentPrice / product.initialPrice) * 100,
   );
@@ -41,6 +47,9 @@ export default async function ProductDetailPage({ params }) {
           <button type="button" className="primary-button" disabled={product.status !== "판매중"}>
             {product.status === "판매중" ? "집어가기" : product.status}
           </button>
+          <form action={changeWatchlist.bind(null, id)} className="watch-form">
+            <button type="submit">{watched ? "내 도마에서 빼기" : "내 도마에 담기"}</button>
+          </form>
         </div>
       </section>
 
