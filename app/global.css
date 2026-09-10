@@ -1,6 +1,7 @@
 @import "simpledotcss/simple.css";
 
-:root {
+
+/* :root {
   --green: #087443;
   --green-dark: #0d3d2a;
   --green-pale: #e9f8df;
@@ -148,4 +149,4 @@ footer { margin-top: 70px; padding: 36px 0; background: var(--green-dark); color
   .price-chart { overflow-x: auto; }
   .price-point { min-width: 90px; }
   .footer-inner { flex-direction: column; }
-}
+}  */

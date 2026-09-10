@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { connection } from "next/server";
-import Header from "@/components/Header";
 import DetailProduct from "@/components/DetailProduct";
 import { getPopularProducts, getSoonProducts } from "@/lib/products";
 
@@ -14,18 +13,17 @@ export default async function Home() {
 
   return (
     <>
-      <Header />
 
-      <main className="page-container">
+      <main>
 
         {/* =========================
             메인 배너
         ========================= */}
-        <section className="hero">
+        <section>
 
-          <div className="hero-content">
+          <div>
 
-            <p className="hero-label">
+            <p>
               🔪 대파마켓
             </p>
 
@@ -47,7 +45,7 @@ export default async function Home() {
 
           </div>
 
-          <div className="hero-image">
+          <div>
             <div>
               <span>🥬</span>
               <strong>🔪</strong>
@@ -60,9 +58,9 @@ export default async function Home() {
         {/* =========================
             인기 상품
         ========================= */}
-        <section className="product-section">
+        <section>
 
-          <div className="section-header">
+          <div>
 
             <div>
               <h2>🔥 지금 인기 있는 상품</h2>
@@ -78,7 +76,7 @@ export default async function Home() {
           </div>
 
 
-          <div className="product-grid">
+          <div>
 
             {popularProducts.map((product) => (
               <DetailProduct
@@ -95,9 +93,9 @@ export default async function Home() {
         {/* =========================
             곧 썰리는 상품
         ========================= */}
-        <section className="product-section soon-section">
+        <section>
 
-          <div className="section-header">
+          <div>
 
             <div>
               <h2>🔪 곧 썰리는 상품</h2>
@@ -113,7 +111,7 @@ export default async function Home() {
           </div>
 
 
-          <div className="product-grid">
+          <div>
 
             {soonProducts.map((product) => (
               <DetailProduct
@@ -130,15 +128,15 @@ export default async function Home() {
         {/* =========================
             서비스 소개
         ========================= */}
-        <section className="features">
+        <section>
 
-          <div className="section-title">
+          <div>
             <p>WHY DAEPA MARKET?</p>
             <h2>대파마켓이 특별한 이유</h2>
           </div>
 
 
-          <div className="feature-grid">
+          <div>
 
             <article>
               <span>🔪</span>
@@ -191,7 +189,7 @@ export default async function Home() {
       ========================= */}
       <footer>
 
-        <div className="footer-inner">
+        <div>
 
           <div>
             <strong>🥬 대파마켓</strong>

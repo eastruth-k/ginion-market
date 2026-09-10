@@ -1,5 +1,5 @@
 import "./global.css"
-
+import Header from "@/components/Header"
 
 export const metadata = {
   title: "대파마켓",
@@ -9,7 +9,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <Header/>
+        {children}
+        </body>
     </html>
   );
 }

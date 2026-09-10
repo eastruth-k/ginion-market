@@ -23,16 +23,16 @@ export default async function ProductDetailPage({ params }) {
   );
 
   return (
-    <main className="page-container page-section">
-      <section className="product-detail">
-        <div className="detail-image-panel">
+    <main>
+      <section>
+        <div>
           <Image src={product.images[0]} alt={product.name} width={600} height={600} priority />
         </div>
-        <div className="detail-summary">
-          <span className="product-category">{product.category}</span>
+        <div>
+          <span>{product.category}</span>
           <h1>{product.name}</h1>
           <p>{product.info}</p>
-          <dl className="product-facts">
+          <dl>
             <div><dt>현재 가격</dt><dd>{product.currentPrice.toLocaleString()}원</dd></div>
             <div><dt>시작 가격</dt><dd>{product.initialPrice.toLocaleString()}원</dd></div>
             <div><dt>판매 최저가</dt><dd>{product.minimumPrice.toLocaleString()}원</dd></div>
@@ -40,32 +40,31 @@ export default async function ProductDetailPage({ params }) {
             <div><dt>거래 지역</dt><dd>{product.region}</dd></div>
             <div><dt>관심</dt><dd>{watchCount}명</dd></div>
           </dl>
-          <div className="seller-box">
+          <div>
             <strong>{seller?.nickname ?? "알 수 없는 판매자"}</strong>
             <span>{seller?.address}</span>
           </div>
-          <button type="button" className="primary-button" disabled={product.status !== "판매중"}>
+          <button type="button" disabled={product.status !== "판매중"}>
             {product.status === "판매중" ? "집어가기" : product.status}
           </button>
-          <form action={changeWatchlist.bind(null, id)} className="watch-form">
+          <form action={changeWatchlist.bind(null, id)}>
             <button type="submit">{watched ? "내 도마에서 빼기" : "내 도마에 담기"}</button>
           </form>
         </div>
       </section>
 
-      <section className="price-history">
-        <div className="section-header">
+      <section>
+        <div>
           <div>
-            <p className="eyebrow">PRICE HISTORY</p>
+            <p>PRICE HISTORY</p>
             <h2>가격 변동</h2>
           </div>
           <span>최초 가격 대비 {totalDiscountRate}% 인하</span>
         </div>
-        <div className="price-chart" aria-label="가격 변동 그래프">
+        <div aria-label="가격 변동 그래프">
           {priceChanges.map((change) => (
-            <div className="price-point" key={change._id.toString()}>
+            <div key={change._id.toString()}>
               <span
-                className="price-bar"
                 style={{ height: `${Math.max(12, change.newPrice / product.initialPrice * 100)}%` }}
               />
               <strong>{change.newPrice.toLocaleString()}원</strong>
@@ -73,10 +72,10 @@ export default async function ProductDetailPage({ params }) {
             </div>
           ))}
         </div>
-        <ol className="price-reasons">
+        <ol>
           {priceChanges.map((change) => (
             <li key={change._id.toString()}>
-              <span className={`change-status ${change.status.toLowerCase()}`}>{change.status}</span>
+              <span>{change.status}</span>
               <div>
                 <strong>{change.reason}</strong>
                 <time>{change.changedAt.toLocaleString("ko-KR")}</time>

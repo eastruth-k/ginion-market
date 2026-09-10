@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { connection } from "next/server";
-import Header from "@/components/Header";
 import { signUp } from "@/app/auth-actions";
 
 export default async function SignupPage({ searchParams }) {
@@ -9,12 +8,11 @@ export default async function SignupPage({ searchParams }) {
 
   return (
     <>
-      <Header />
-      <main className="auth-page page-container">
-        <form action={signUp} className="auth-form">
-          <p className="eyebrow">JOIN DAEPA</p>
+      <main>
+        <form action={signUp}>
+          <p>JOIN DAEPA</p>
           <h1>회원가입</h1>
-          {error && <p className="form-error">{error}</p>}
+          {error && <p>{error}</p>}
           <label>닉네임<input name="nickname" required /></label>
           <label>이메일<input name="email" type="email" required /></label>
           <label>비밀번호<input name="password" type="password" minLength="8" required /></label>

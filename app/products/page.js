@@ -12,16 +12,16 @@ export default async function ProductsPage({ searchParams }) {
   ]);
 
   return (
-    <main className="page-container page-section">
-      <div className="page-heading">
+    <main>
+      <div>
         <div>
-          <p className="eyebrow">상품 찾기</p>
+          <p>상품 찾기</p>
           <h1>가격이 썰리고 있는 상품</h1>
         </div>
         <strong>{products.length}개</strong>
       </div>
 
-      <form className="product-filters" action="/products">
+      <form action="/products">
         <label>
           검색
           <input name="q" type="search" defaultValue={filters.q ?? ""} />
@@ -62,13 +62,13 @@ export default async function ProductsPage({ searchParams }) {
       </form>
 
       {products.length > 0 ? (
-        <div className="product-grid">
+        <div>
           {products.map((product) => (
             <DetailProduct key={product._id.toString()} product={product} />
           ))}
         </div>
       ) : (
-        <p className="empty-state">조건에 맞는 상품이 없습니다.</p>
+        <p>조건에 맞는 상품이 없습니다.</p>
       )}
     </main>
   );
