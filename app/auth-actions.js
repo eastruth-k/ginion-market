@@ -12,7 +12,8 @@ export async function signUp(formData) {
   const profileImage = formData.get("profileImage")?.toString().trim() ?? "";
 
   if (!nickname || !email || !address || password.length < 8) {
-    redirect("/signup?error=필수 입력값과 8자 이상의 비밀번호를 확인해주세요.");
+    const message = encodeURIComponent("필수 입력값과 8자 이상의 비밀번호를 확인해주세요.");
+    redirect(`/signup?error=${message}`);
   }
 
   let failed = false;
@@ -32,7 +33,8 @@ export async function signUp(formData) {
   }
 
   if (failed) {
-    redirect("/signup?error=이미 사용 중인 이메일이거나 가입 정보가 올바르지 않습니다.");
+    const message = encodeURIComponent("이미 사용 중인 이메일이거나 가입 정보가 올바르지 않습니다.");
+    redirect(`/signup?error=${message}`);
   }
 
   redirect("/");
@@ -50,7 +52,8 @@ export async function signIn(formData) {
   }
 
   if (failed) {
-    redirect("/login?error=이메일 또는 비밀번호를 확인해주세요.");
+    const message = encodeURIComponent("이메일 또는 비밀번호를 확인해주세요.");
+    redirect(`/login?error=${message}`);
   }
 
   redirect("/");
