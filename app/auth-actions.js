@@ -16,6 +16,7 @@ export async function signUp(formData) {
     redirect(`/signup?error=${message}`);
   }
 
+  // Teacher: redirect는 예외를 던져 실행을 끝내므로 넓은 try/catch 안에 두면 성공 이동까지 실패로 잡을 수 있습니다. failed와 try/catch 밖 redirect의 역할을 따라가 보기.
   let failed = false;
 
   try {

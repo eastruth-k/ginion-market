@@ -7,6 +7,7 @@ export default function DetailProduct({ product }) {
     ((product.initialPrice - product.currentPrice) / product.initialPrice) * 100,
   );
   const latestChange = product.latestPriceChange;
+  // Teacher: 이 계산은 다음 평가 시각을 표시할 값을 만들 뿐 가격을 갱신하지 않습니다. 실제 currentPrice를 바꾸는 코드와 주기 실행 장치가 있는지 찾아보고, 표시된 문구와 구현된 기능 범위를 구분해 보기.
   const nextEvaluationAt = latestChange?.changedAt
     ? new Date(latestChange.changedAt.getTime() + 24 * 60 * 60 * 1000)
     : null;

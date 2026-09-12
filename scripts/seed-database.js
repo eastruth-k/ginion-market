@@ -7,6 +7,7 @@ import {
   watchlists,
 } from "./seeds.js";
 
+// Teacher: AGENTS.md는 초기화·시드를 scripts/seeds.js에서만 관리하도록 합니다. 현재는 데이터와 실행기가 분리되어 있으므로 npm run seed의 진입점을 추적하고, 한 파일로 합치는 안의 장단점을 비교해 보기.
 const uri = process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017";
 const databaseName = process.env.MONGODB_DB ?? "daepa_market";
 
