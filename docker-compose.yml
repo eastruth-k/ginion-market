@@ -1,0 +1,43 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        CODEX_VERSION: ${CODEX_VERSION:-0.154.0-alpha.6.2}
+    image: ginion-market:ubuntu24.04
+    container_name: ginion-market
+    init: true
+    ports:
+      - "3000:3000"
+    environment:
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set}
+      BETTER_AUTH_URL: ${BETTER_AUTH_URL:-http://localhost:3000}
+      MONGODB_URI: mongodb://127.0.0.1:27017
+      MONGODB_DB: ${MONGODB_DB:-daepa_market}
+      CODEX_HOME: /home/nodeapp/.codex
+    volumes:
+      - type: bind
+        source: ${MONGODB_DATA_PATH:?MONGODB_DATA_PATH must be set}
+        target: /var/lib/mongodb
+    restart: unless-stopped
+    stop_grace_period: 30s
+
+  codex:
+    profiles:
+      - tools
+    image: ginion-market:ubuntu24.04
+    entrypoint:
+      - /usr/bin/codex
+    working_dir: /workspace
+    user: nodeapp
+    stdin_open: true
+    tty: true
+    environment:
+      CODEX_HOME: /home/nodeapp/.codex
+    volumes:
+      - type: bind
+        source: ${CODEX_HOME_PATH:?CODEX_HOME_PATH must be set}
+        target: /home/nodeapp/.codex
+      - type: bind
+        source: ${PROJECT_PATH:?PROJECT_PATH must be set}
+        target: /workspace

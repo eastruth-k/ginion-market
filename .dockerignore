@@ -1,0 +1,7 @@
+.git
+.next
+node_modules
+.docker-data
+.env*
+!.env.example
+npm-debug.log*
