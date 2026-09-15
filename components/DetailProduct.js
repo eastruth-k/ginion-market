@@ -22,6 +22,7 @@ export default function DetailProduct({ product }) {
             alt={product.name}
             width={600}
             height={600}
+            unoptimized
           />
           <span className="sale-status">{product.status}</span>
           {product.watchCount > 0 && (

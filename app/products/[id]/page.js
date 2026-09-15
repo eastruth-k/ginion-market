@@ -26,7 +26,14 @@ export default async function ProductDetailPage({ params }) {
     <main>
       <section>
         <div>
-          <Image src={product.images[0]} alt={product.name} width={600} height={600} priority />
+          <Image
+            src={product.images[0]}
+            alt={product.name}
+            width={600}
+            height={600}
+            priority
+            unoptimized
+          />
         </div>
         <div>
           <span>{product.category}</span>
