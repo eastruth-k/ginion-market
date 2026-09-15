@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { isValidRegionAddress } from "../app/signup/address.js";
 import {
   priceChange,
   products,
@@ -107,6 +108,12 @@ test("회원 이메일과 관심목록 관계는 중복되지 않는다", () => 
 
   assert.equal(new Set(emails).size, emails.length);
   assert.equal(new Set(watchlistRelations).size, watchlistRelations.length);
+});
+
+test("모든 회원 주소는 시·군·구·동 수준의 국내 지역 형식이다", () => {
+  for (const user of users) {
+    assert.equal(isValidRegionAddress(user.address), true);
+  }
 });
 
 test("상품 가격과 이미지 개수는 허용 범위 안에 있다", () => {

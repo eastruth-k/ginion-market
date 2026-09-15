@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { signUp } from "@/app/auth-actions";
+import AddressSearch from "@/app/signup/address-search";
 
 export default async function SignupPage({ searchParams }) {
   await connection();
@@ -16,7 +17,7 @@ export default async function SignupPage({ searchParams }) {
           <label>닉네임<input name="nickname" required /></label>
           <label>이메일<input name="email" type="email" required /></label>
           <label>비밀번호<input name="password" type="password" minLength="8" required /></label>
-          <label>주소<input name="address" required /></label>
+          <AddressSearch />
           <button type="submit">가입하기</button>
           <p>이미 회원인가요? <Link href="/login">로그인</Link></p>
         </form>

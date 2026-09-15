@@ -83,6 +83,19 @@ button { cursor: pointer; }
 .auth-form label { display: block; margin-bottom: 14px; color: var(--muted); font-size: 13px; font-weight: 700; }
 .auth-form input { width: 100%; margin: 6px 0 0; }
 .auth-form button { width: 100%; margin: 8px 0 0; background: var(--green); color: white; }
+.address-field { margin-bottom: 14px; }
+.address-field > label { margin-bottom: 0; }
+.address-control { display: flex; align-items: stretch; gap: 8px; }
+.address-control input { flex: 1; min-width: 0; background: #f3f6f4; }
+.address-control button { width: auto; margin-top: 6px; white-space: nowrap; }
+.address-field small { display: block; margin-top: 6px; color: var(--muted); font-size: 11px; }
+.address-error { margin: 8px 0 0; color: #a82e27; font-size: 12px; }
+.address-search-layer { position: fixed; inset: 0; z-index: 100; padding: 20px; background: rgba(13, 38, 27, .55); }
+.address-search-layer[hidden] { display: none; }
+.address-search-layer section { width: min(100%, 520px); margin: 5vh auto 0; padding: 0; overflow: hidden; border-radius: 14px; background: white; }
+.address-search-header { min-height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 8px 14px; border-bottom: 1px solid var(--line); }
+.address-search-header button { width: auto; margin: 0; padding: 7px 12px; background: white; color: var(--green); }
+.address-search-content { height: min(72vh, 520px); }
 .auth-form > p:last-child { margin-bottom: 0; color: var(--muted); font-size: 13px; text-align: center; }
 .auth-form > p:last-child a { color: var(--green); font-weight: 700; }
 .form-error { padding: 10px 12px; border-radius: 8px; background: #fff0ef; color: #a82e27; font-size: 13px; }

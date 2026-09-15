@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { isValidRegionAddress } from "@/app/signup/address";
 
 export async function signUp(formData) {
   const nickname = formData.get("nickname")?.toString().trim() ?? "";
@@ -12,6 +13,11 @@ export async function signUp(formData) {
 
   if (!nickname || !email || !address || password.length < 8) {
     const message = encodeURIComponent("필수 입력값과 8자 이상의 비밀번호를 확인해주세요.");
+    redirect(`/signup?error=${message}`);
+  }
+
+  if (!isValidRegionAddress(address)) {
+    const message = encodeURIComponent("주소 찾기에서 거래 지역을 다시 선택해주세요.");
     redirect(`/signup?error=${message}`);
   }
 
