@@ -158,9 +158,9 @@ export const priceChange = [
 ];
 
 export const users = [
-  { _id: "66d000000000000000000001", email: "admin@daepa.test", nickname: "대파관리자", address: "서울특별시 강남구 역삼동", passwordHash: "$2b$12$development.seed.admin.password.hash", profileImage: "https://placehold.co/200x200?text=Admin", createdAt: new Date("2026-03-01T00:00:00.000Z"), role: "관리자" },
-  { _id: "66d000000000000000000002", email: "minsu@daepa.test", nickname: "민수마켓", address: "서울특별시 강남구 역삼동", passwordHash: "$2b$12$development.seed.user002.password.hash", profileImage: "https://placehold.co/200x200?text=Minsu", createdAt: new Date("2026-04-10T00:00:00.000Z"), role: "일반회원" },
-  { _id: "66d000000000000000000003", email: "jiyun@daepa.test", nickname: "지윤상점", address: "인천광역시 연수구 송도동", passwordHash: "$2b$12$development.seed.user003.password.hash", profileImage: "https://placehold.co/200x200?text=Jiyun", createdAt: new Date("2026-05-15T00:00:00.000Z"), role: "일반회원" },
-  { _id: "66d000000000000000000004", email: "seojun@daepa.test", nickname: "서준중고", address: "서울특별시 마포구 서교동", passwordHash: "$2b$12$development.seed.user004.password.hash", profileImage: "https://placehold.co/200x200?text=Seojun", createdAt: new Date("2026-06-20T00:00:00.000Z"), role: "일반회원" },
-  { _id: "66d000000000000000000005", email: "yuna@daepa.test", nickname: "유나네도마", address: "경기도 수원시 영통구 광교동", passwordHash: "$2b$12$development.seed.user005.password.hash", profileImage: "https://placehold.co/200x200?text=Yuna", createdAt: new Date("2026-07-25T00:00:00.000Z"), role: "일반회원" },
+  { _id: "66d000000000000000000001", email: "admin@daepa.test", nickname: "대파관리자", address: "서울특별시 강남구 역삼동", passwordHash: "$2b$12$development.seed.admin.password.hash", createdAt: new Date("2026-03-01T00:00:00.000Z"), role: "관리자" },
+  { _id: "66d000000000000000000002", email: "minsu@daepa.test", nickname: "민수마켓", address: "서울특별시 강남구 역삼동", passwordHash: "$2b$12$development.seed.user002.password.hash", createdAt: new Date("2026-04-10T00:00:00.000Z"), role: "일반회원" },
+  { _id: "66d000000000000000000003", email: "jiyun@daepa.test", nickname: "지윤상점", address: "인천광역시 연수구 송도동", passwordHash: "$2b$12$development.seed.user003.password.hash", createdAt: new Date("2026-05-15T00:00:00.000Z"), role: "일반회원" },
+  { _id: "66d000000000000000000004", email: "seojun@daepa.test", nickname: "서준중고", address: "서울특별시 마포구 서교동", passwordHash: "$2b$12$development.seed.user004.password.hash", createdAt: new Date("2026-06-20T00:00:00.000Z"), role: "일반회원" },
+  { _id: "66d000000000000000000005", email: "yuna@daepa.test", nickname: "유나네도마", address: "경기도 수원시 영통구 광교동", passwordHash: "$2b$12$development.seed.user005.password.hash", createdAt: new Date("2026-07-25T00:00:00.000Z"), role: "일반회원" },
 ];

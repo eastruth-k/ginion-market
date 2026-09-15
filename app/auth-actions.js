@@ -9,7 +9,6 @@ export async function signUp(formData) {
   const email = formData.get("email")?.toString().trim().toLowerCase() ?? "";
   const password = formData.get("password")?.toString() ?? "";
   const address = formData.get("address")?.toString().trim() ?? "";
-  const profileImage = formData.get("profileImage")?.toString().trim() ?? "";
 
   if (!nickname || !email || !address || password.length < 8) {
     const message = encodeURIComponent("필수 입력값과 8자 이상의 비밀번호를 확인해주세요.");
@@ -26,7 +25,6 @@ export async function signUp(formData) {
         email,
         password,
         address,
-        image: profileImage || undefined,
       },
     });
   } catch {

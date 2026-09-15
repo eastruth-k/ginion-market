@@ -18,7 +18,6 @@ const expectedFields = {
     "email",
     "nickname",
     "passwordHash",
-    "profileImage",
     "role",
   ],
   products: [
