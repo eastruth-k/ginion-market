@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { deleteProductImages, saveProductImages } from "@/lib/product-images";
 import { createProduct } from "@/lib/products";
 import { validateProductForm } from "@/app/products/product-validation";
 
@@ -23,13 +24,26 @@ export async function registerProduct(previousState, formData) {
   }
 
   let productId;
+  let savedImages = [];
 
   try {
+    savedImages = await saveProductImages(
+      validation.productData.images,
+      session.user.id,
+    );
     productId = await createProduct({
       ...validation.productData,
+      images: savedImages.map((image) => image.url),
       sellerId: session.user.id,
     });
   } catch (error) {
+    if (savedImages.length > 0) {
+      try {
+        await deleteProductImages(savedImages.map((image) => image.id));
+      } catch (cleanupError) {
+        console.error("저장된 상품 이미지 정리에 실패했습니다.", cleanupError);
+      }
+    }
     console.error("상품 등록 중 데이터베이스 오류가 발생했습니다.", error);
     return {
       error: "상품을 등록하지 못했습니다. 잠시 후 다시 시도해주세요.",

@@ -1,29 +1,34 @@
 import Link from "next/link";
+import Image from "next/image";
 import { connection } from "next/server";
 import DetailProduct from "@/components/DetailProduct";
+import ProductCarousel from "@/app/product-carousel";
 import { getPopularProducts, getSoonProducts } from "@/lib/products";
 
 export default async function Home() {
   await connection();
 
   const [popularProducts, soonProducts] = await Promise.all([
-    getPopularProducts(),
-    getSoonProducts(),
+    getPopularProducts(12),
+    getSoonProducts(12),
   ]);
 
   return (
     <>
 
       <main>
+        <section className="hero">
+          <Image
+              className="hero-banner-background"
+              src="/images/banners/daepa-hero-banner-1280.png"
+              alt=""
+              fill
+              priority
+              sizes="(max-width: 1280px) calc(100vw - 40px), 1280px"
+            />
 
-        {/* =========================
-            메인 배너
-        ========================= */}
-        <section>
-
-          <div>
-
-            <p>
+          <div className="hero-content">
+            <p className="hero-label">
               🔪 대파마켓
             </p>
 
@@ -36,31 +41,23 @@ export default async function Home() {
             <p>
               시간이 지날수록 가격이 내려가는
               <br />
-              새로운 중고거래를 시작해보세요.
+              새로운 중고거래를{" "}
+              시작해보세요.
             </p>
 
             <Link href="/products">
-              지금 상품 보러가기 →
+              🥬🔪지금 상품 보러가기 →
             </Link>
-
           </div>
-
-          <div>
-            <div>
-              <span>🥬</span>
-              <strong>🔪</strong>
-            </div>
-          </div>
-
         </section>
 
 
         {/* =========================
             인기 상품
         ========================= */}
-        <section>
+        <section className="product-section">
 
-          <div>
+          <div className="section-header">
 
             <div>
               <h2>🔥 지금 인기 있는 상품</h2>
@@ -76,7 +73,10 @@ export default async function Home() {
           </div>
 
 
-          <div>
+          <ProductCarousel
+            itemCount={popularProducts.length}
+            title="인기 상품"
+          >
 
             {popularProducts.map((product) => (
               <DetailProduct
@@ -85,7 +85,7 @@ export default async function Home() {
               />
             ))}
 
-          </div>
+          </ProductCarousel>
 
         </section>
 
@@ -93,9 +93,9 @@ export default async function Home() {
         {/* =========================
             곧 썰리는 상품
         ========================= */}
-        <section>
+        <section className="product-section">
 
-          <div>
+          <div className="section-header">
 
             <div>
               <h2>🔪 곧 썰리는 상품</h2>
@@ -111,7 +111,10 @@ export default async function Home() {
           </div>
 
 
-          <div>
+          <ProductCarousel
+            itemCount={soonProducts.length}
+            title="곧 썰리는 상품"
+          >
 
             {soonProducts.map((product) => (
               <DetailProduct
@@ -120,7 +123,7 @@ export default async function Home() {
               />
             ))}
 
-          </div>
+          </ProductCarousel>
 
         </section>
 
@@ -136,8 +139,7 @@ export default async function Home() {
           </div>
 
 
-          <div>
-
+          <div className="introduce">
             <article>
               <span>🔪</span>
               <h3>자동 가격 인하</h3>
@@ -146,8 +148,6 @@ export default async function Home() {
                 가격이 자동으로 내려가요.
               </p>
             </article>
-
-
             <article>
               <span>🎯</span>
               <h3>목표가 알림</h3>
@@ -156,8 +156,6 @@ export default async function Home() {
                 가격 변화를 지켜볼 수 있어요.
               </p>
             </article>
-
-
             <article>
               <span>🥬</span>
               <h3>내 도마</h3>
@@ -166,8 +164,6 @@ export default async function Home() {
                 가격 변화를 지켜보세요.
               </p>
             </article>
-
-
             <article>
               <span>🛒</span>
               <h3>집어가기</h3>
@@ -176,9 +172,7 @@ export default async function Home() {
                 바로 구매할 수 있어요.
               </p>
             </article>
-
           </div>
-
         </section>
 
       </main>

@@ -1,12 +1,10 @@
 const allowedConditions = ["최상", "상", "중", "하"];
+const allowedImageTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const maximumImageSize = 5 * 1024 * 1024;
 
-function isValidImageUrl(image) {
-  try {
-    const url = new URL(image);
-    return url.protocol === "http:" || url.protocol === "https:";
-  } catch {
-    return false;
-  }
+function parsePrice(value) {
+  const price = value.replaceAll(",", "");
+  return /^\d+$/.test(price) ? Number(price) : Number.NaN;
 }
 
 export function validateProductForm(formData) {
@@ -14,7 +12,6 @@ export function validateProductForm(formData) {
     name: formData.get("name")?.toString() ?? "",
     category: formData.get("category")?.toString() ?? "",
     info: formData.get("info")?.toString() ?? "",
-    images: formData.get("images")?.toString() ?? "",
     region: formData.get("region")?.toString() ?? "",
     condition: formData.get("condition")?.toString() ?? "",
     initialPrice: formData.get("initialPrice")?.toString() ?? "",
@@ -25,12 +22,14 @@ export function validateProductForm(formData) {
   const info = values.info.trim();
   const region = values.region.trim();
   const condition = values.condition;
-  const initialPrice = Number(values.initialPrice);
-  const minimumPrice = Number(values.minimumPrice);
-  const images = values.images
-    .split(/\r?\n/)
-    .map((image) => image.trim())
-    .filter(Boolean);
+  const initialPrice = parsePrice(values.initialPrice);
+  const minimumPrice = parsePrice(values.minimumPrice);
+  const images = formData
+    .getAll("images")
+    .filter(
+      (image) =>
+        image && typeof image.arrayBuffer === "function" && image.size > 0,
+    );
   const validationError = (error) => ({ error, values });
 
   if (!name || !category || !info || !region) {
@@ -64,14 +63,18 @@ export function validateProductForm(formData) {
 
   if (images.length < 1 || images.length > 5) {
     return validationError(
-      "상품 이미지 URL을 한 줄에 하나씩, 1개에서 5개까지 입력해주세요.",
+      "상품 이미지를 1개에서 5개까지 첨부해주세요.",
     );
   }
 
-  if (images.some((image) => !isValidImageUrl(image))) {
+  if (images.some((image) => !allowedImageTypes.includes(image.type))) {
     return validationError(
-      "이미지 주소는 http:// 또는 https://로 시작하는 URL이어야 합니다.",
+      "상품 이미지는 JPG, PNG, WEBP, GIF 파일만 첨부할 수 있습니다.",
     );
+  }
+
+  if (images.some((image) => image.size > maximumImageSize)) {
+    return validationError("상품 이미지 한 개의 크기는 5MB 이하여야 합니다.");
   }
 
   return {

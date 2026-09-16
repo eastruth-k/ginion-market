@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { connection } from "next/server";
-import Image from "next/image";
 import { headers } from "next/headers";
+import Link from "next/link";
+import ProductImageSlider from "@/app/products/[id]/product-image-slider";
 import { changeWatchlist } from "@/app/watchlist-actions";
 import { auth } from "@/lib/auth";
 import { getProductById } from "@/lib/products";
@@ -18,6 +19,8 @@ export default async function ProductDetailPage({ params }) {
   const { product, seller, priceChanges, watchCount } = result;
   const session = await auth.api.getSession({ headers: await headers() });
   const watched = session ? await hasWatchlist(session.user.id, id) : false;
+  const isOwnProduct = session?.user.id === product.sellerId;
+  const canPurchase = product.status === "판매중" && !isOwnProduct;
   const totalDiscountRate = Math.round(
     (1 - product.currentPrice / product.initialPrice) * 100,
   );
@@ -25,15 +28,8 @@ export default async function ProductDetailPage({ params }) {
   return (
     <main>
       <section>
-        <div>
-          <Image
-            src={product.images[0]}
-            alt={product.name}
-            width={600}
-            height={600}
-            priority
-            unoptimized
-          />
+        <div className="detail-image-panel">
+          <ProductImageSlider images={product.images} productName={product.name} />
         </div>
         <div>
           <span>{product.category}</span>
@@ -51,27 +47,41 @@ export default async function ProductDetailPage({ params }) {
             <strong>{seller?.nickname ?? "알 수 없는 판매자"}</strong>
             <span>{seller?.address}</span>
           </div>
-          <button type="button" disabled={product.status !== "판매중"}>
-            {product.status === "판매중" ? "집어가기" : product.status}
-          </button>
+          {canPurchase ? (
+            <Link
+              className="primary-button purchase-link"
+              href={`/products/${id}/checkout`}
+            >
+              집어가기
+            </Link>
+          ) : (
+            <button className="primary-button" type="button" disabled>
+              {isOwnProduct ? "내 상품" : product.status}
+            </button>
+          )}
           <form action={changeWatchlist.bind(null, id)}>
             <button type="submit">{watched ? "내 도마에서 빼기" : "내 도마에 담기"}</button>
           </form>
         </div>
       </section>
 
-      <section>
-        <div>
+      <section className="price-history">
+        <div className="section-header">
           <div>
-            <p>PRICE HISTORY</p>
+            <p className="eyebrow">PRICE HISTORY</p>
             <h2>가격 변동</h2>
           </div>
           <span>최초 가격 대비 {totalDiscountRate}% 인하</span>
         </div>
-        <div aria-label="가격 변동 그래프">
+        <div className="price-chart" aria-label="가격 변동 그래프">
           {priceChanges.map((change) => (
-            <div key={change._id.toString()}>
+            <div
+              className="price-point"
+              key={change._id.toString()}
+              aria-label={`${change.changedAt.toLocaleDateString("ko-KR")} ${change.newPrice.toLocaleString()}원`}
+            >
               <span
+                className="price-bar"
                 style={{ height: `${Math.max(12, change.newPrice / product.initialPrice * 100)}%` }}
               />
               <strong>{change.newPrice.toLocaleString()}원</strong>
@@ -79,10 +89,18 @@ export default async function ProductDetailPage({ params }) {
             </div>
           ))}
         </div>
-        <ol>
+        <ol className="price-reasons">
           {priceChanges.map((change) => (
             <li key={change._id.toString()}>
-              <span>{change.status}</span>
+              <span
+                className={
+                  change.status === "DOWN"
+                    ? "change-status down"
+                    : "change-status"
+                }
+              >
+                {change.status}
+              </span>
               <div>
                 <strong>{change.reason}</strong>
                 <time>{change.changedAt.toLocaleString("ko-KR")}</time>

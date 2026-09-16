@@ -1,9 +1,138 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { registerProduct } from "@/app/products/actions";
 
 const initialState = { error: "", values: {}, revision: 0 };
+const maximumImageCount = 5;
+
+function formatPrice(value) {
+  const digits = value.replace(/\D/g, "");
+  return digits.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function ImageUpload() {
+  const inputRef = useRef(null);
+  const previewUrlsRef = useRef([]);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [imageError, setImageError] = useState("");
+
+  useEffect(() => {
+    return () => {
+      previewUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, []);
+
+  function updateInputFiles(images) {
+    const dataTransfer = new DataTransfer();
+    images.forEach((image) => dataTransfer.items.add(image.file));
+
+    if (inputRef.current) {
+      inputRef.current.files = dataTransfer.files;
+    }
+  }
+
+  function handleImagesChange(event) {
+    const newFiles = Array.from(event.target.files ?? []);
+    const selectedFileKeys = new Set(
+      selectedImages.map(
+        (image) =>
+          `${image.file.name}-${image.file.size}-${image.file.lastModified}`,
+      ),
+    );
+    const uniqueNewFiles = newFiles.filter((file) => {
+      const fileKey = `${file.name}-${file.size}-${file.lastModified}`;
+      return !selectedFileKeys.has(fileKey);
+    });
+
+    if (selectedImages.length + uniqueNewFiles.length > maximumImageCount) {
+      updateInputFiles(selectedImages);
+      setImageError("상품 이미지는 최대 5개까지 첨부할 수 있습니다.");
+      return;
+    }
+
+    const addedImages = uniqueNewFiles.map((file) => {
+      const url = URL.createObjectURL(file);
+      previewUrlsRef.current.push(url);
+
+      return {
+        file,
+        id: `${file.name}-${file.size}-${file.lastModified}`,
+        url,
+      };
+    });
+    const nextImages = [...selectedImages, ...addedImages];
+
+    setImageError("");
+    setSelectedImages(nextImages);
+    updateInputFiles(nextImages);
+  }
+
+  function removeImage(imageId) {
+    const removedImage = selectedImages.find((image) => image.id === imageId);
+    const nextImages = selectedImages.filter((image) => image.id !== imageId);
+
+    if (removedImage) {
+      URL.revokeObjectURL(removedImage.url);
+      previewUrlsRef.current = previewUrlsRef.current.filter(
+        (url) => url !== removedImage.url,
+      );
+    }
+
+    setImageError("");
+    setSelectedImages(nextImages);
+    updateInputFiles(nextImages);
+  }
+
+  return (
+    <div className="wide-field image-upload-field">
+      <label htmlFor="product-images">상품 이미지</label>
+      <input
+        ref={inputRef}
+        id="product-images"
+        name="images"
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/gif"
+        multiple
+        onChange={handleImagesChange}
+        required
+      />
+      <small>JPG, PNG, WEBP, GIF 파일을 최대 5개까지 첨부해주세요.</small>
+      {imageError && (
+        <p className="image-upload-error" role="alert">
+          {imageError}
+        </p>
+      )}
+      {selectedImages.length > 0 && (
+        <div className="image-preview-list" aria-label="선택한 상품 이미지">
+          {selectedImages.map((image, index) => (
+            <figure key={image.id}>
+              <Image
+                src={image.url}
+                alt={`${image.file.name} 미리보기`}
+                width={160}
+                height={160}
+                unoptimized
+              />
+              <button
+                className="image-preview-remove"
+                type="button"
+                onClick={() => removeImage(image.id)}
+                aria-label={`${image.file.name} 삭제`}
+              >
+                ×
+              </button>
+              <figcaption>
+                {index + 1}. {image.file.name}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function ProductForm() {
   const [state, formAction, pending] = useActionState(
@@ -11,6 +140,12 @@ export default function ProductForm() {
     initialState,
   );
   const values = state.values ?? initialState.values;
+  const [initialPrice, setInitialPrice] = useState(
+    formatPrice(values.initialPrice ?? ""),
+  );
+  const [minimumPrice, setMinimumPrice] = useState(
+    formatPrice(values.minimumPrice ?? ""),
+  );
 
   return (
     <form key={state.revision} action={formAction} className="product-form">
@@ -42,16 +177,7 @@ export default function ProductForm() {
         상품 설명
         <textarea name="info" defaultValue={values.info} rows="6" required />
       </label>
-      <label className="wide-field">
-        상품 이미지 URL
-        <textarea
-          name="images"
-          defaultValue={values.images}
-          rows="5"
-          placeholder="한 줄에 하나씩, 최대 5개"
-          required
-        />
-      </label>
+      <ImageUpload />
       <label>
         거래 지역
         <input name="region" defaultValue={values.region} required />
@@ -69,10 +195,11 @@ export default function ProductForm() {
         판매 시작 가격
         <input
           name="initialPrice"
-          defaultValue={values.initialPrice}
-          type="number"
-          min="1"
-          step="1"
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9,]+"
+          value={initialPrice}
+          onChange={(event) => setInitialPrice(formatPrice(event.target.value))}
           required
         />
       </label>
@@ -80,10 +207,11 @@ export default function ProductForm() {
         판매 최저 가격
         <input
           name="minimumPrice"
-          defaultValue={values.minimumPrice}
-          type="number"
-          min="1"
-          step="1"
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9,]+"
+          value={minimumPrice}
+          onChange={(event) => setMinimumPrice(formatPrice(event.target.value))}
           required
         />
       </label>
