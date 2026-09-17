@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import test from "node:test";
 import { isValidRegionAddress } from "../app/signup/address.js";
 import {
@@ -147,8 +149,15 @@ test("상품 가격과 이미지 개수는 허용 범위 안에 있다", () => {
     assert.ok(product.minimumPrice > 0);
     assert.ok(product.minimumPrice <= product.currentPrice);
     assert.ok(product.currentPrice <= product.initialPrice);
-    assert.ok(product.images.length >= 1);
-    assert.ok(product.images.length <= 5);
+    assert.equal(product.images.length, 5);
+
+    for (const imagePath of product.images) {
+      assert.match(imagePath, /^\/images\/products\/seed\/.+\.webp$/);
+      assert.equal(
+        existsSync(join(process.cwd(), "public", imagePath.slice(1))),
+        true,
+      );
+    }
   }
 });
 
