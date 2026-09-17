@@ -1,3 +1,98 @@
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+import { hashPassword } from "better-auth/crypto";
+import { MongoClient, ObjectId } from "mongodb";
+
+export const DEMO_USER_PASSWORD = "Demo1234!";
+
+export const DEMO_USER_IDS = Object.freeze({
+  admin: "66d000000000000000000001",
+  minsu: "66d000000000000000000002",
+  jiyun: "66d000000000000000000003",
+  seojun: "66d000000000000000000004",
+  yuna: "66d000000000000000000005",
+});
+
+export const users = [
+  {
+    _id: DEMO_USER_IDS.admin,
+    email: "admin@daepa.test",
+    emailVerified: true,
+    nickname: "대파관리자",
+    image: null,
+    address: "서울특별시 강남구 역삼동",
+    createdAt: new Date("2026-03-01T00:00:00.000Z"),
+    updatedAt: new Date("2026-03-01T00:00:00.000Z"),
+    role: "관리자",
+  },
+  {
+    _id: DEMO_USER_IDS.minsu,
+    email: "minsu@daepa.test",
+    emailVerified: true,
+    nickname: "민수마켓",
+    image: null,
+    address: "서울특별시 강남구 역삼동",
+    createdAt: new Date("2026-04-10T00:00:00.000Z"),
+    updatedAt: new Date("2026-04-10T00:00:00.000Z"),
+    role: "일반회원",
+  },
+  {
+    _id: DEMO_USER_IDS.jiyun,
+    email: "jiyun@daepa.test",
+    emailVerified: true,
+    nickname: "지윤상점",
+    image: null,
+    address: "인천광역시 연수구 송도동",
+    createdAt: new Date("2026-05-15T00:00:00.000Z"),
+    updatedAt: new Date("2026-05-15T00:00:00.000Z"),
+    role: "일반회원",
+  },
+  {
+    _id: DEMO_USER_IDS.seojun,
+    email: "seojun@daepa.test",
+    emailVerified: true,
+    nickname: "서준중고",
+    image: null,
+    address: "서울특별시 마포구 서교동",
+    createdAt: new Date("2026-06-20T00:00:00.000Z"),
+    updatedAt: new Date("2026-06-20T00:00:00.000Z"),
+    role: "일반회원",
+  },
+  {
+    _id: DEMO_USER_IDS.yuna,
+    email: "yuna@daepa.test",
+    emailVerified: true,
+    nickname: "유나마켓",
+    image: null,
+    address: "경기도 수원시 영통구 광교동",
+    createdAt: new Date("2026-07-25T00:00:00.000Z"),
+    updatedAt: new Date("2026-07-25T00:00:00.000Z"),
+    role: "일반회원",
+  },
+];
+
+const accountIds = [
+  "66c000000000000000000001",
+  "66c000000000000000000002",
+  "66c000000000000000000003",
+  "66c000000000000000000004",
+  "66c000000000000000000005",
+];
+
+export async function createCredentialAccounts(passwordHasher = hashPassword) {
+  return Promise.all(
+    users.map(async (user, index) => ({
+      _id: accountIds[index],
+      accountId: user._id,
+      providerId: "credential",
+      userId: user._id,
+      password: await passwordHasher(DEMO_USER_PASSWORD),
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    })),
+  );
+}
+
 export const products = [
   {
     _id: "66e000000000000000000001",
@@ -12,7 +107,7 @@ export const products = [
     condition: "상",
     status: "판매중",
     createdAt: new Date("2026-09-01T01:00:00.000Z"),
-    sellerId: "66d000000000000000000002",
+    sellerId: DEMO_USER_IDS.minsu,
   },
   {
     _id: "66e000000000000000000002",
@@ -27,7 +122,7 @@ export const products = [
     condition: "상",
     status: "판매중",
     createdAt: new Date("2026-08-25T03:00:00.000Z"),
-    sellerId: "66d000000000000000000003",
+    sellerId: DEMO_USER_IDS.jiyun,
   },
   {
     _id: "66e000000000000000000003",
@@ -42,7 +137,7 @@ export const products = [
     condition: "최상",
     status: "판매중",
     createdAt: new Date("2026-08-29T06:00:00.000Z"),
-    sellerId: "66d000000000000000000004",
+    sellerId: DEMO_USER_IDS.seojun,
   },
   {
     _id: "66e000000000000000000004",
@@ -57,7 +152,7 @@ export const products = [
     condition: "중",
     status: "판매중",
     createdAt: new Date("2026-09-02T02:00:00.000Z"),
-    sellerId: "66d000000000000000000002",
+    sellerId: DEMO_USER_IDS.minsu,
   },
   {
     _id: "66e000000000000000000005",
@@ -72,7 +167,7 @@ export const products = [
     condition: "최상",
     status: "판매중",
     createdAt: new Date("2026-09-08T20:00:00.000Z"),
-    sellerId: "66d000000000000000000003",
+    sellerId: DEMO_USER_IDS.jiyun,
   },
   {
     _id: "66e000000000000000000006",
@@ -87,7 +182,7 @@ export const products = [
     condition: "상",
     status: "판매 완료",
     createdAt: new Date("2026-08-18T04:00:00.000Z"),
-    sellerId: "66d000000000000000000004",
+    sellerId: DEMO_USER_IDS.seojun,
   },
   {
     _id: "66e000000000000000000007",
@@ -102,7 +197,7 @@ export const products = [
     condition: "상",
     status: "판매 완료",
     createdAt: new Date("2026-08-12T05:00:00.000Z"),
-    sellerId: "66d000000000000000000005",
+    sellerId: DEMO_USER_IDS.yuna,
   },
   {
     _id: "66e000000000000000000008",
@@ -117,24 +212,24 @@ export const products = [
     condition: "최상",
     status: "판매 완료",
     createdAt: new Date("2026-08-05T08:00:00.000Z"),
-    sellerId: "66d000000000000000000002",
+    sellerId: DEMO_USER_IDS.minsu,
   },
 ];
 
 export const watchlists = [
-  { _id: "66f000000000000000000001", productId: "66e000000000000000000001", userId: "66d000000000000000000003", createdAt: new Date("2026-09-09T01:00:00.000Z") },
-  { _id: "66f000000000000000000002", productId: "66e000000000000000000001", userId: "66d000000000000000000004", createdAt: new Date("2026-09-08T09:00:00.000Z") },
-  { _id: "66f000000000000000000003", productId: "66e000000000000000000002", userId: "66d000000000000000000002", createdAt: new Date("2026-09-08T04:00:00.000Z") },
-  { _id: "66f000000000000000000004", productId: "66e000000000000000000002", userId: "66d000000000000000000004", createdAt: new Date("2026-09-07T03:00:00.000Z") },
-  { _id: "66f000000000000000000005", productId: "66e000000000000000000003", userId: "66d000000000000000000005", createdAt: new Date("2026-09-06T06:00:00.000Z") },
-  { _id: "66f000000000000000000006", productId: "66e000000000000000000004", userId: "66d000000000000000000003", createdAt: new Date("2026-09-05T02:00:00.000Z") },
-  { _id: "66f000000000000000000007", productId: "66e000000000000000000005", userId: "66d000000000000000000002", createdAt: new Date("2026-09-09T00:30:00.000Z") },
+  { _id: "66f000000000000000000001", productId: "66e000000000000000000001", userId: DEMO_USER_IDS.jiyun, createdAt: new Date("2026-09-09T01:00:00.000Z") },
+  { _id: "66f000000000000000000002", productId: "66e000000000000000000001", userId: DEMO_USER_IDS.seojun, createdAt: new Date("2026-09-08T09:00:00.000Z") },
+  { _id: "66f000000000000000000003", productId: "66e000000000000000000002", userId: DEMO_USER_IDS.minsu, createdAt: new Date("2026-09-08T04:00:00.000Z") },
+  { _id: "66f000000000000000000004", productId: "66e000000000000000000002", userId: DEMO_USER_IDS.seojun, createdAt: new Date("2026-09-07T03:00:00.000Z") },
+  { _id: "66f000000000000000000005", productId: "66e000000000000000000003", userId: DEMO_USER_IDS.yuna, createdAt: new Date("2026-09-06T06:00:00.000Z") },
+  { _id: "66f000000000000000000006", productId: "66e000000000000000000004", userId: DEMO_USER_IDS.jiyun, createdAt: new Date("2026-09-05T02:00:00.000Z") },
+  { _id: "66f000000000000000000007", productId: "66e000000000000000000005", userId: DEMO_USER_IDS.minsu, createdAt: new Date("2026-09-09T00:30:00.000Z") },
 ];
 
 export const transactions = [
-  { _id: "670000000000000000000001", buyerId: "66d000000000000000000003", sellerId: "66d000000000000000000004", productId: "66e000000000000000000006", price: 82000, createdAt: new Date("2026-09-04T07:00:00.000Z") },
-  { _id: "670000000000000000000002", buyerId: "66d000000000000000000002", sellerId: "66d000000000000000000005", productId: "66e000000000000000000007", price: 84000, createdAt: new Date("2026-08-28T08:00:00.000Z") },
-  { _id: "670000000000000000000003", buyerId: "66d000000000000000000004", sellerId: "66d000000000000000000002", productId: "66e000000000000000000008", price: 90000, createdAt: new Date("2026-08-20T09:00:00.000Z") },
+  { _id: "670000000000000000000001", buyerId: DEMO_USER_IDS.jiyun, sellerId: DEMO_USER_IDS.seojun, productId: "66e000000000000000000006", price: 82000, createdAt: new Date("2026-09-04T07:00:00.000Z") },
+  { _id: "670000000000000000000002", buyerId: DEMO_USER_IDS.minsu, sellerId: DEMO_USER_IDS.yuna, productId: "66e000000000000000000007", price: 84000, createdAt: new Date("2026-08-28T08:00:00.000Z") },
+  { _id: "670000000000000000000003", buyerId: DEMO_USER_IDS.seojun, sellerId: DEMO_USER_IDS.minsu, productId: "66e000000000000000000008", price: 90000, createdAt: new Date("2026-08-20T09:00:00.000Z") },
 ];
 
 export const priceChange = [
@@ -157,10 +252,80 @@ export const priceChange = [
   { _id: "671000000000000000000011", productId: "66e000000000000000000008", changedAt: new Date("2026-08-20T09:00:00.000Z"), previousPrice: 105000, newPrice: 90000, seq: 1, reason: "90,000원에 거래가 성사되어 판매 완료", status: "DOWN" },
 ];
 
-export const users = [
-  { _id: "66d000000000000000000001", email: "admin@daepa.test", nickname: "대파관리자", address: "서울특별시 강남구 역삼동", passwordHash: "$2b$12$development.seed.admin.password.hash", createdAt: new Date("2026-03-01T00:00:00.000Z"), role: "관리자" },
-  { _id: "66d000000000000000000002", email: "minsu@daepa.test", nickname: "민수마켓", address: "서울특별시 강남구 역삼동", passwordHash: "$2b$12$development.seed.user002.password.hash", createdAt: new Date("2026-04-10T00:00:00.000Z"), role: "일반회원" },
-  { _id: "66d000000000000000000003", email: "jiyun@daepa.test", nickname: "지윤상점", address: "인천광역시 연수구 송도동", passwordHash: "$2b$12$development.seed.user003.password.hash", createdAt: new Date("2026-05-15T00:00:00.000Z"), role: "일반회원" },
-  { _id: "66d000000000000000000004", email: "seojun@daepa.test", nickname: "서준중고", address: "서울특별시 마포구 서교동", passwordHash: "$2b$12$development.seed.user004.password.hash", createdAt: new Date("2026-06-20T00:00:00.000Z"), role: "일반회원" },
-  { _id: "66d000000000000000000005", email: "yuna@daepa.test", nickname: "유나마켓", address: "경기도 수원시 영통구 광교동", passwordHash: "$2b$12$development.seed.user005.password.hash", createdAt: new Date("2026-07-25T00:00:00.000Z"), role: "일반회원" },
-];
+export async function seedDatabase({
+  uri = process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017",
+  databaseName = process.env.MONGODB_DB ?? "daepa_market",
+} = {}) {
+  if (process.env.NODE_ENV === "production") {
+    throw new Error("운영 환경에서는 개발용 시드를 실행할 수 없습니다.");
+  }
+
+  if (["admin", "config", "local"].includes(databaseName)) {
+    throw new Error(`${databaseName} 데이터베이스에는 시드를 실행할 수 없습니다.`);
+  }
+
+  const accounts = await createCredentialAccounts();
+  const collections = {
+    users,
+    account: accounts,
+    products,
+    watchlists,
+    transactions,
+    priceChange,
+  };
+  const client = new MongoClient(uri);
+
+  try {
+    await client.connect();
+    const database = client.db(databaseName);
+
+    for (const collectionName of [
+      "session",
+      "verification",
+      ...Object.keys(collections),
+    ]) {
+      await database.collection(collectionName).deleteMany({});
+    }
+
+    for (const [collectionName, documents] of Object.entries(collections)) {
+      await database.collection(collectionName).insertMany(
+        documents.map((document) => ({
+          ...document,
+          _id: new ObjectId(document._id),
+          ...(collectionName === "account"
+            ? { userId: new ObjectId(document.userId) }
+            : {}),
+        })),
+      );
+    }
+
+    await database.collection("users").createIndex({ email: 1 }, { unique: true });
+    await database.collection("account").createIndex({ userId: 1 });
+    await database
+      .collection("account")
+      .createIndex({ providerId: 1, accountId: 1 }, { unique: true });
+    await database
+      .collection("watchlists")
+      .createIndex({ userId: 1, productId: 1 }, { unique: true });
+    await database.collection("products").createIndex({ status: 1, createdAt: -1 });
+    await database.collection("products").createIndex({ category: 1, currentPrice: 1 });
+    await database.collection("transactions").createIndex({ createdAt: -1 });
+    await database
+      .collection("priceChange")
+      .createIndex({ productId: 1, seq: 1 }, { unique: true });
+
+    console.log(`MongoDB ${databaseName} 데이터베이스에 초기 데이터를 저장했습니다.`);
+    for (const [collectionName, documents] of Object.entries(collections)) {
+      console.log(`${collectionName}: ${documents.length}건`);
+    }
+    console.log(`데모 계정 공통 비밀번호: ${DEMO_USER_PASSWORD}`);
+  } finally {
+    await client.close();
+  }
+}
+
+const executedFile = process.argv[1] ? pathToFileURL(resolve(process.argv[1])).href : "";
+
+if (import.meta.url === executedFile) {
+  await seedDatabase();
+}

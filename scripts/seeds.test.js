@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { isValidRegionAddress } from "../app/signup/address.js";
 import {
+  createCredentialAccounts,
+  DEMO_USER_PASSWORD,
   priceChange,
   products,
   transactions,
@@ -17,9 +19,11 @@ const expectedFields = {
     "address",
     "createdAt",
     "email",
+    "emailVerified",
+    "image",
     "nickname",
-    "passwordHash",
     "role",
+    "updatedAt",
   ],
   products: [
     "_id",
@@ -108,6 +112,27 @@ test("회원 이메일과 관심목록 관계는 중복되지 않는다", () => 
 
   assert.equal(new Set(emails).size, emails.length);
   assert.equal(new Set(watchlistRelations).size, watchlistRelations.length);
+});
+
+test("모든 회원은 Better Auth credential 계정을 가진다", async () => {
+  const accounts = await createCredentialAccounts(async (password) => {
+    assert.equal(password, DEMO_USER_PASSWORD);
+    return `hashed:${password}`;
+  });
+
+  assert.equal(accounts.length, users.length);
+
+  for (const user of users) {
+    const account = accounts.find((candidate) => candidate.userId === user._id);
+
+    assert.ok(account);
+    assert.equal(account.accountId, user._id);
+    assert.equal(account.providerId, "credential");
+    assert.equal(account.password, `hashed:${DEMO_USER_PASSWORD}`);
+    assert.equal(user.emailVerified, true);
+    assert.equal(user.image, null);
+    assert.ok(user.updatedAt >= user.createdAt);
+  }
 });
 
 test("모든 회원 주소는 시·군·구·동 수준의 국내 지역 형식이다", () => {

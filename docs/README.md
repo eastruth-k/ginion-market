@@ -96,9 +96,25 @@ _id : 고유 키값
 email : 아이디로 사용할 것이고 고유의 값
 nickname : 닉네임
 address : Kakao 주소 검색으로 선택한 거래 지역(시·도, 시·군·구, 읍·면·동, 상세주소 제외)
-passwordHash : 비밀번호 해쉬값
+emailVerified : 이메일 확인 여부
+image : 프로필 이미지 주소
 createdAt : 가입일
+updatedAt : 회원정보 수정일
 role : 일반회원/관리자
+
+[account:Better Auth 인증 계정]
+_id : 고유 키값
+accountId : 인증 제공자에서 사용하는 계정 키(Better Auth 사용자 키)
+providerId : 인증 제공자(이메일 로그인은 credential)
+userId : users 컬렉션을 참조하는 Better Auth ObjectId
+password : Better Auth 형식의 비밀번호 해쉬값
+createdAt : 계정 생성일
+updatedAt : 계정 수정일
+
+개발용 seed 사용자는 `admin@daepa.test`, `minsu@daepa.test`, `jiyun@daepa.test`,
+`seojun@daepa.test`, `yuna@daepa.test`이며 공통 비밀번호는 `Demo1234!`이다.
+`npm run seed`는 업무 데이터와 Better Auth의 account, session, verification 데이터를
+초기화하므로 운영 환경에서는 실행할 수 없다.
 
 
 
