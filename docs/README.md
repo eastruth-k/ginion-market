@@ -127,7 +127,7 @@ updatedAt : 계정 수정일
 
 [products:상품]
 _id : 고유 키값
-images : 상품이미지(최대 5개)
+images : 상품이미지(최대 5개, 파일당 5MB 이하)
 name : 상품명
 category : 카테고리
 info : 상품 설명

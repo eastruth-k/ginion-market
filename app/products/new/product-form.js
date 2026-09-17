@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { registerProduct } from "@/app/products/actions";
+import { validateSelectedProductImageSize } from "@/app/products/product-validation";
 
 const initialState = { error: "", values: {}, revision: 0 };
 const maximumImageCount = 5;
@@ -52,6 +53,13 @@ function ImageUpload() {
       return;
     }
 
+    const imageSizeError = validateSelectedProductImageSize(uniqueNewFiles);
+    if (imageSizeError) {
+      updateInputFiles(selectedImages);
+      setImageError(imageSizeError);
+      return;
+    }
+
     const addedImages = uniqueNewFiles.map((file) => {
       const url = URL.createObjectURL(file);
       previewUrlsRef.current.push(url);
@@ -98,7 +106,10 @@ function ImageUpload() {
         onChange={handleImagesChange}
         required
       />
-      <small>JPG, PNG, WEBP, GIF 파일을 최대 5개까지 첨부해주세요.</small>
+      <small>
+        JPG, PNG, WEBP, GIF 파일을 한 장당 5MB 이하로 최대 5개까지
+        첨부해주세요.
+      </small>
       {imageError && (
         <p className="image-upload-error" role="alert">
           {imageError}
