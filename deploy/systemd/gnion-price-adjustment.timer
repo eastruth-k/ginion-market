@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Gnion Market product price adjustment every hour
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+Unit=gnion-price-adjustment.service
+
+[Install]
+WantedBy=timers.target
