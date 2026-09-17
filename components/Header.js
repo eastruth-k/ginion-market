@@ -22,7 +22,7 @@ export default async function Header() {
           priority
           >
           </Image>
-          <span>대파마켓</span>
+          <span>대파마켓2</span>
         </Link>
 
         {/* 검색 */}
