@@ -18,8 +18,10 @@ export default async function ProductDetailPage({ params }) {
 
   const { product, seller, priceChanges, watchCount } = result;
   const session = await auth.api.getSession({ headers: await headers() });
-  const watched = session ? await hasWatchlist(session.user.id, id) : false;
   const isOwnProduct = session?.user.id === product.sellerId;
+  const watched = session && !isOwnProduct
+    ? await hasWatchlist(session.user.id, id)
+    : false;
   const canPurchase = product.status === "판매중" && !isOwnProduct;
   const totalDiscountRate = Math.round(
     (1 - product.currentPrice / product.initialPrice) * 100,
@@ -59,9 +61,11 @@ export default async function ProductDetailPage({ params }) {
               {isOwnProduct ? "내 상품" : product.status}
             </button>
           )}
-          <form className="watch-form" action={changeWatchlist.bind(null, id)}>
-            <button type="submit">{watched ? "관심상품에서 삭제" : "관심상품에 추가"}</button>
-          </form>
+          {!isOwnProduct && (
+            <form className="watch-form" action={changeWatchlist.bind(null, id)}>
+              <button type="submit">{watched ? "관심상품에서 삭제" : "관심상품에 추가"}</button>
+            </form>
+          )}
         </div>
       </section>
 
