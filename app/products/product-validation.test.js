@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { validateProductForm } from "./product-validation.js";
+import {
+  validateProductForm,
+  validateSelectedProductImageSize,
+} from "./product-validation.js";
 
 function createValidFormData() {
   const formData = new FormData();
@@ -96,6 +99,19 @@ test("5MB를 초과한 이미지 파일을 거부한다", () => {
 
   assert.equal(
     validateProductForm(formData).error,
+    "상품 이미지 한 개의 크기는 5MB 이하여야 합니다.",
+  );
+});
+
+test("브라우저에서 선택한 5MB 초과 이미지도 즉시 거부한다", () => {
+  const images = [
+    new File([new Uint8Array(5 * 1024 * 1024 + 1)], "large.png", {
+      type: "image/png",
+    }),
+  ];
+
+  assert.equal(
+    validateSelectedProductImageSize(images),
     "상품 이미지 한 개의 크기는 5MB 이하여야 합니다.",
   );
 });

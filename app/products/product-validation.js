@@ -1,6 +1,14 @@
 const allowedConditions = ["최상", "상", "중", "하"];
 const allowedImageTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-const maximumImageSize = 5 * 1024 * 1024;
+export const maximumProductImageSize = 5 * 1024 * 1024;
+
+export function validateSelectedProductImageSize(images) {
+  if (images.some((image) => image.size > maximumProductImageSize)) {
+    return "상품 이미지 한 개의 크기는 5MB 이하여야 합니다.";
+  }
+
+  return "";
+}
 
 function parsePrice(value) {
   const price = value.replaceAll(",", "");
@@ -73,9 +81,8 @@ export function validateProductForm(formData) {
     );
   }
 
-  if (images.some((image) => image.size > maximumImageSize)) {
-    return validationError("상품 이미지 한 개의 크기는 5MB 이하여야 합니다.");
-  }
+  const imageSizeError = validateSelectedProductImageSize(images);
+  if (imageSizeError) return validationError(imageSizeError);
 
   return {
     error: null,
