@@ -8,6 +8,8 @@
   --line: #dfe8e2;
   --muted: #68766e;
   --surface: #ffffff;
+  --accent: var(--green);
+  --accent-hover: var(--green);
 }
 
 * { box-sizing: border-box; }
@@ -31,15 +33,16 @@ input:focus, select:focus, textarea:focus { border-color: var(--green); box-shad
 .logo, .logo:visited { display: flex; align-items: center; color: var(--green); font-size: 22px; font-weight: 800; white-space: nowrap; }
 .search-form { margin: 0; display: flex; flex: 1; max-width: 430px; }
 .search-form input { width: 100%; margin: 0; border-radius: 24px 0 0 24px; border-right: 0; }
-.search-form button { margin: 0; border-radius: 0 24px 24px 0; background: var(--green); color: white; }
-.site-header nav { margin-left: auto; display: flex; gap: 18px; font-size: 14px; }
+.search-form button { margin: 0; width:60px; border-radius: 0 24px 24px 0; background: var(--green); color: white; }
+.site-header nav { margin-left: auto; display: flex; gap: 18px; font-size: 14px; border:none !important;}
 .site-header nav a { padding: 7px 10px; border-radius: 9px; color: #314239; transition: background-color .2s, color .2s; }
 .site-header nav a:hover { background: var(--green-pale); color: var(--green); }
+header nav a, header nav a:visited{border: none;}
 .register-button, .register-button:visited, .primary-button { padding: 11px 18px; border-radius: 10px; background: var(--green); color: white; font-weight: 700; box-shadow: 0 5px 14px rgba(8,116,67,.16); }
 .register-button:hover, .primary-button:hover { background: var(--green-dark); transform: translateY(-1px); }
 .signout-form { margin: 0; }
 .signout-form button { margin: 0; padding: 10px 14px; border: 1px solid var(--line); background: white; color: var(--green); }
-
+.signout-form button:hover{color:#fff;}
 .hero {width: 100%;aspect-ratio: 1280 / 375;margin: 28px 0 64px;padding: 54px;position: relative;display: flex;align-items: center;border-radius: 24px;background: var(--green-pale);}
 .hero-banner-background {z-index: 0;object-fit: cover;border-radius: inherit;}
 .hero-content {width: min(45%, 480px);position: relative;z-index: 1;}
@@ -129,7 +132,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--green); box-shad
 .auth-form > p:last-child { margin-bottom: 0; color: var(--muted); font-size: 13px; text-align: center; }
 .auth-form > p:last-child a { color: var(--green); font-weight: 700; }
 .form-error { margin: 0 0 18px; padding: 11px 13px; border: 1px solid #f2cbc7; border-radius: 9px; background: #fff0ef; color: #a82e27; font-size: 13px; }
-.product-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 820px; margin: 0; padding: 30px; border: 1px solid var(--line); border-radius: 18px; background: white; }
+.product-form { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 0; padding: 30px; border: 1px solid var(--line); border-radius: 18px; background: white; }
 .product-form label { margin: 0; color: var(--muted); font-size: 13px; font-weight: 700; }
 .product-form input, .product-form select, .product-form textarea { width: 100%; margin: 6px 0 0; }
 .product-form textarea { resize: vertical; }
@@ -170,7 +173,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--green); box-shad
 .primary-button { width: 100%; border: 0; }
 .primary-button:disabled { cursor: not-allowed; background: #9ca7a0; }
 .watch-form { margin: 10px 0 0; }
-.watch-form button { width: 100%; margin: 0; border: 1px solid var(--green); background: white; color: var(--green); }
+.watch-form button { width: 100%; margin: 0; border: 1px solid var(--green); border-radius: 10px; background: white; color: var(--green); }
+.watch-form button:hover {color:#fff ; }
 .activity-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .activity-grid article, .activity-grid > a { padding: 28px; border: 1px solid var(--line); border-radius: 16px; background: white; }
 .activity-grid > a { display: block; transition: border-color .2s, transform .2s; }

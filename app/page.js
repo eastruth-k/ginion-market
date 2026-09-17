@@ -101,7 +101,7 @@ export default async function Home() {
           <div className="section-header">
 
             <div>
-              <h2>🆕 최근 등록상품</h2>
+              <h2>🆕 최근 등록 상품</h2>
               <p>
                 새로 올라온 상품을 먼저 만나보세요.
               </p>
@@ -116,7 +116,7 @@ export default async function Home() {
 
           <ProductCarousel
             itemCount={recentProducts.length}
-            title="최근 등록상품"
+            title="최근 등록 상품"
           >
 
             {recentProducts.map((product) => (
