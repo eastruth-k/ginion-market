@@ -1,27 +1,11 @@
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {
-//   experimental: {
-//     serverActions: {
-//       bodySizeLimit: "26mb",
-//     },
-//   },
-//   images: {
-//     remotePatterns: [
-//       {
-//         protocol: "https",
-//         hostname: "placehold.co",
-//         pathname: "/**",
-//       },
-//     ],
-//   },
-// };
-
-// export default nextConfig;
-
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  allowedDevOrigins:['gnion-market.p-e.kr/']
+  allowedDevOrigins: ["gnion-market.p-e.kr/"],
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "26mb",
+    },
+  },
 };
 
 export default nextConfig;
