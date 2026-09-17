@@ -1,25 +1,75 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Script from "next/script";
 import { createRegionAddress } from "@/app/signup/address";
+
+const postcodeScriptUrl =
+  "https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js";
+
+function getPostcodeConstructor() {
+  return window.kakao?.Postcode ?? window.daum?.Postcode;
+}
 
 export default function AddressSearch() {
   const [address, setAddress] = useState("");
-  const [scriptReady, setScriptReady] = useState(false);
+  const [scriptStatus, setScriptStatus] = useState("idle");
   const [error, setError] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const searchContainerRef = useRef(null);
+  const scriptPromiseRef = useRef(null);
 
-  function openAddressSearch() {
-    const Postcode = window.kakao?.Postcode ?? window.daum?.Postcode;
+  function loadPostcodeScript() {
+    const loadedPostcode = getPostcodeConstructor();
+    if (loadedPostcode) return Promise.resolve(loadedPostcode);
 
-    if (!scriptReady || !Postcode) {
-      setError("주소 검색 서비스를 불러오는 중입니다. 잠시 후 다시 시도해주세요.");
-      return;
+    if (!scriptPromiseRef.current) {
+      scriptPromiseRef.current = new Promise((resolve, reject) => {
+        const existingScript = document.querySelector(
+          `script[src="${postcodeScriptUrl}"]`,
+        );
+        const script = existingScript ?? document.createElement("script");
+
+        script.addEventListener("load", () => {
+          const Postcode = getPostcodeConstructor();
+          if (Postcode) {
+            resolve(Postcode);
+            return;
+          }
+
+          script.remove();
+          reject(new Error("주소 검색 생성자를 찾을 수 없습니다."));
+        }, { once: true });
+        script.addEventListener("error", () => {
+          script.remove();
+          reject(new Error("주소 검색 스크립트를 불러오지 못했습니다."));
+        }, { once: true });
+
+        if (!existingScript) {
+          script.src = postcodeScriptUrl;
+          script.async = true;
+          document.head.appendChild(script);
+        }
+      });
     }
 
-    setSearchOpen(true);
+    return scriptPromiseRef.current;
+  }
+
+  async function openAddressSearch() {
+    setScriptStatus("loading");
+    setError("");
+
+    let Postcode;
+
+    try {
+      Postcode = await loadPostcodeScript();
+      setScriptStatus("ready");
+    } catch {
+      scriptPromiseRef.current = null;
+      setScriptStatus("error");
+      setError("주소 검색 서비스를 불러오지 못했습니다. 다시 시도해주세요.");
+      return;
+    }
 
     new Postcode({
       oncomplete(data) {
@@ -41,16 +91,12 @@ export default function AddressSearch() {
       width: "100%",
       height: "100%",
     }).embed(searchContainerRef.current);
+
+    setSearchOpen(true);
   }
 
   return (
     <div className="address-field">
-      <Script
-        src="https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
-        strategy="afterInteractive"
-        onReady={() => setScriptReady(true)}
-        onError={() => setError("주소 검색 서비스를 불러오지 못했습니다.")}
-      />
       <label htmlFor="signup-address">주소</label>
       <div className="address-control">
         <input
@@ -61,8 +107,8 @@ export default function AddressSearch() {
           readOnly
           required
         />
-        <button type="button" onClick={openAddressSearch} disabled={!scriptReady}>
-          주소 찾기
+        <button type="button" onClick={openAddressSearch}>
+          {scriptStatus === "loading" ? "불러오는 중..." : "주소 찾기"}
         </button>
       </div>
       <small>상세주소는 저장하지 않고 시·군·구·동까지만 저장합니다.</small>
@@ -76,6 +122,11 @@ export default function AddressSearch() {
           <div className="address-search-content" ref={searchContainerRef} />
         </section>
       </div>
+      <small>
+        {scriptStatus === "ready" && "주소 검색 준비 완료"}
+        {scriptStatus === "loading" && "주소 검색 준비 중..."}
+        {scriptStatus === "error" && "주소 검색을 다시 시도해주세요."}
+      </small>
     </div>
   );
 }
