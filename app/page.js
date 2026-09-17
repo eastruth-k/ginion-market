@@ -3,6 +3,7 @@ import Image from "next/image";
 import { connection } from "next/server";
 import DetailProduct from "@/components/DetailProduct";
 import ProductCarousel from "@/app/product-carousel";
+import PriceAdjustmentButton from "@/app/price-adjustment-button";
 import { getPopularProducts, getRecentProducts } from "@/lib/products";
 
 export default async function Home() {
@@ -49,6 +50,8 @@ export default async function Home() {
               🥬🔪지금 상품 보러가기 →
             </Link>
           </div>
+
+          <PriceAdjustmentButton />
         </section>
 
 

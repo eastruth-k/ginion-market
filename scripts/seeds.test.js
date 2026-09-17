@@ -144,6 +144,8 @@ test("모든 회원 주소는 시·군·구·동 수준의 국내 지역 형식�
 });
 
 test("상품 가격과 이미지 개수는 허용 범위 안에 있다", () => {
+  assert.equal(products.length, 30);
+
   for (const product of products) {
     assert.ok(product.initialPrice > 0);
     assert.ok(product.minimumPrice > 0);
@@ -159,6 +161,18 @@ test("상품 가격과 이미지 개수는 허용 범위 안에 있다", () => {
       );
     }
   }
+});
+
+test("시드 상품은 여러 상위 카테고리에 고르게 분포한다", () => {
+  const topLevelCategories = new Set(
+    products.map((product) => product.category.split(" > ")[0]),
+  );
+  const nonElectronicProducts = products.filter(
+    (product) => !product.category.startsWith("전자기기"),
+  );
+
+  assert.ok(topLevelCategories.size >= 10);
+  assert.ok(nonElectronicProducts.length >= 20);
 });
 
 test("관심목록과 거래는 존재하는 회원과 상품만 참조한다", () => {
