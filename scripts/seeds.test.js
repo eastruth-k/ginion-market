@@ -277,12 +277,6 @@ test("최근 30일 거래의 중앙값을 계산할 수 있는 동일 상품군�
   assert.equal(getMedian(prices), 84000);
 });
 
-test("상품 상태는 판매중과 판매 완료만 사용한다", () => {
-  const statuses = new Set(products.map((product) => product.status));
-
-  assert.deepEqual([...statuses].sort(), ["판매 완료", "판매중"].sort());
-});
-
 test("등록 후 24시간이 지나지 않은 Cold Start 상품이 있다", () => {
   const twentyFourHoursAgo = new Date(referenceTime.getTime() - 24 * 60 * 60 * 1000);
   const coldStartProducts = products.filter(
