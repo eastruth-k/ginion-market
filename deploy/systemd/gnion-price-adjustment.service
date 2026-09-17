@@ -6,7 +6,8 @@ After=network.target mongod.service
 Type=oneshot
 User=ubuntu
 WorkingDirectory=/home/ubuntu/ginion-market
-ExecStart=/bin/bash -lc 'npm run prices:adjust'
+Environment=PATH=/home/ubuntu/.nvm/versions/node/v24.21.0/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/home/ubuntu/.nvm/versions/node/v24.21.0/bin/npm run prices:adjust
 
 [Install]
 WantedBy=multi-user.target
