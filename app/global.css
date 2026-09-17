@@ -230,6 +230,16 @@ button { cursor: pointer; }
 .mypage-product-list a > span { color: var(--green); font-size: 26px; }
 .mypage-empty { margin: 0; padding: 34px; border: 1px dashed var(--line); border-radius: 14px; background: white; color: var(--muted); text-align: center; }
 
+.legal-page { max-width: 840px; margin: 0 auto; }
+.legal-page > header { margin-bottom: 32px; }
+.legal-effective-date { color: var(--muted); font-size: 14px; }
+.legal-notice { margin-bottom: 36px; padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--green-pale); }
+.legal-notice p { margin-bottom: 0; }
+.legal-page section { padding-block: 8px; }
+.legal-page section p, .legal-page li { line-height: 1.75; }
+.legal-page section a { color: var(--green); font-weight: 700; text-decoration: underline; }
+.legal-supplement { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); background: transparent; color: inherit; }
+
 footer { margin-top: 70px; padding: 36px 0; background: var(--green-dark); color: white; }
 .footer-inner { width: min(1180px, calc(100% - 40px)); margin: auto; display: flex; justify-content: space-between; gap: 20px; }
 .footer-inner p { margin-bottom: 0; color: #b9cec2; }
