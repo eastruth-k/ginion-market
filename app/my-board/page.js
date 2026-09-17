@@ -12,15 +12,23 @@ export default async function MyBoardPage() {
   const products = await getWatchlistProducts(session.user.id);
 
   return (
-    <>
-      <main>
-        <div><div><p>WATCHLIST</p><h1>관심상품</h1></div><strong>{products.length}개</strong></div>
-        {products.length > 0 ? (
-          <div>
-            {products.map((product) => <DetailProduct key={product._id.toString()} product={product} />)}
-          </div>
-        ) : <p>관심상품을 추가해보세요.</p>}
-      </main>
-    </>
+    <main className="my-board-page">
+      <div className="page-heading">
+        <div>
+          <p className="eyebrow">WATCHLIST</p>
+          <h1>관심상품</h1>
+        </div>
+        <strong>{products.length}개</strong>
+      </div>
+      {products.length > 0 ? (
+        <div className="my-board-product-grid">
+          {products.map((product) => (
+            <DetailProduct key={product._id.toString()} product={product} />
+          ))}
+        </div>
+      ) : (
+        <p className="empty-state">관심상품을 추가해보세요.</p>
+      )}
+    </main>
   );
 }

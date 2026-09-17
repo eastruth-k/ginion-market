@@ -26,16 +26,16 @@ export default async function ProductDetailPage({ params }) {
   );
 
   return (
-    <main>
-      <section>
+    <main className="page-section">
+      <section className="product-detail">
         <div className="detail-image-panel">
           <ProductImageSlider images={product.images} productName={product.name} />
         </div>
-        <div>
+        <div className="detail-summary">
           <span>{product.category}</span>
           <h1>{product.name}</h1>
           <p>{product.info}</p>
-          <dl>
+          <dl className="product-facts">
             <div><dt>현재 가격</dt><dd>{product.currentPrice.toLocaleString()}원</dd></div>
             <div><dt>시작 가격</dt><dd>{product.initialPrice.toLocaleString()}원</dd></div>
             <div><dt>판매 최저가</dt><dd>{product.minimumPrice.toLocaleString()}원</dd></div>
@@ -43,7 +43,7 @@ export default async function ProductDetailPage({ params }) {
             <div><dt>거래 지역</dt><dd>{product.region}</dd></div>
             <div><dt>관심</dt><dd>{watchCount}명</dd></div>
           </dl>
-          <div>
+          <div className="seller-box">
             <strong>{seller?.nickname ?? "알 수 없는 판매자"}</strong>
             <span>{seller?.address}</span>
           </div>
@@ -59,7 +59,7 @@ export default async function ProductDetailPage({ params }) {
               {isOwnProduct ? "내 상품" : product.status}
             </button>
           )}
-          <form action={changeWatchlist.bind(null, id)}>
+          <form className="watch-form" action={changeWatchlist.bind(null, id)}>
             <button type="submit">{watched ? "관심상품에서 삭제" : "관심상품에 추가"}</button>
           </form>
         </div>
