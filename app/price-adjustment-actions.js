@@ -13,7 +13,7 @@ export async function runPriceAdjustment() {
 
     return {
       status: "success",
-      message: `랜덤 관심 ${summary.mockInterestCount}개 · 가격 인하 ${summary.decreased}개 · 유지 ${summary.kept}개`,
+      message: `랜덤 관심 ${summary.mockInterestCount}개 · 상승 ${summary.increased}개 · 인하 ${summary.decreased}개 · 유지 ${summary.kept}개`,
     };
   } catch (error) {
     console.error("수동 가격 재책정에 실패했습니다.", error);

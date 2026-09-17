@@ -96,7 +96,9 @@ export default async function ProductDetailPage({ params }) {
                 className={
                   change.status === "DOWN"
                     ? "change-status down"
-                    : "change-status"
+                    : change.status === "UP"
+                      ? "change-status up"
+                      : "change-status"
                 }
               >
                 {change.status}

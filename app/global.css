@@ -192,6 +192,7 @@ header nav a, header nav a:visited{border: none;}
 .price-reasons li div { display: grid; gap: 4px; }
 .change-status { min-width: 52px; padding: 4px 7px; border-radius: 12px; background: #edf1ee; font-size: 11px; font-weight: 800; text-align: center; }
 .change-status.down { background: #e8f5ec; color: var(--green); }
+.change-status.up { background: #fff0ef; color: #c0392b; }
 
 .purchase-link { display: block; text-align: center; }
 .checkout-page { width: min(1040px, calc(100% - 40px)); max-width: 1040px; margin: 0 auto; padding-block: 52px 80px; grid-column: 1 / -1; }

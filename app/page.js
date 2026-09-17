@@ -145,10 +145,10 @@ export default async function Home() {
           <div className="introduce">
             <article>
               <span>🔪</span>
-              <h3>자동 가격 인하</h3>
+              <h3>자동 가격 조정</h3>
               <p>
-                설정한 주기에 따라
-                가격이 자동으로 내려가요.
+                새 관심 수에 따라
+                가격이 자동으로 바뀌어요.
               </p>
             </article>
             <article>
