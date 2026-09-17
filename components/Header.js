@@ -39,7 +39,7 @@ export default async function Header() {
         <nav>
           <Link href="/products">상품</Link>
           {session && <Link href="/products/new">상품 등록</Link>}
-          <Link href="/my-board">내 도마</Link>
+          <Link href="/my-board">관심상품</Link>
           {session ? <Link href="/mypage">my</Link> : <Link href="/login">로그인</Link>}
         </nav>
 

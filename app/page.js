@@ -158,15 +158,15 @@ export default async function Home() {
             </article>
             <article>
               <span>🥬</span>
-              <h3>내 도마</h3>
+              <h3>관심상품</h3>
               <p>
-                관심 상품을 도마에 올려
+                관심 있는 상품을 저장하고
                 가격 변화를 지켜보세요.
               </p>
             </article>
             <article>
               <span>🛒</span>
-              <h3>집어가기</h3>
+              <h3>구매하기</h3>
               <p>
                 원하는 가격이 되면
                 바로 구매할 수 있어요.

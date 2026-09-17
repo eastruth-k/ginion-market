@@ -50,7 +50,7 @@ export default async function MyPage() {
       <div className="mypage-heading">
         <p className="eyebrow">MY DAEPA</p>
         <h1>{session.user.name}님의 활동</h1>
-        <p>판매와 구매, 관심 상품 내역을 한곳에서 확인하세요.</p>
+        <p>판매와 구매, 관심상품 내역을 한곳에서 확인하세요.</p>
       </div>
 
       <nav className="activity-grid" aria-label="MYPAGE 내역 바로가기">
@@ -65,9 +65,9 @@ export default async function MyPage() {
           <p>거래 완료 상품</p>
         </Link>
         <Link href="#watchlists">
-          <span>관심 상품</span>
+          <span>관심상품</span>
           <strong>{activity.watchlistCount}</strong>
-          <p>내 도마에 담은 상품</p>
+          <p>관심상품으로 저장한 상품</p>
         </Link>
       </nav>
 
@@ -125,9 +125,9 @@ export default async function MyPage() {
         <div className="mypage-section-heading">
           <div>
             <p className="eyebrow">WATCHLIST</p>
-            <h2>관심 상품</h2>
+            <h2>관심상품</h2>
           </div>
-          <Link href="/my-board">내 도마 전체 보기</Link>
+          <Link href="/my-board">관심상품 전체 보기</Link>
         </div>
         {watchlists.length > 0 ? (
           <ul className="mypage-product-list">
@@ -142,7 +142,7 @@ export default async function MyPage() {
             ))}
           </ul>
         ) : (
-          <EmptyActivity>관심 상품을 내 도마에 담아보세요.</EmptyActivity>
+          <EmptyActivity>관심상품을 추가해보세요.</EmptyActivity>
         )}
       </section>
     </main>

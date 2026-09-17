@@ -52,7 +52,7 @@ export default async function ProductDetailPage({ params }) {
               className="primary-button purchase-link"
               href={`/products/${id}/checkout`}
             >
-              집어가기
+              구매하기
             </Link>
           ) : (
             <button className="primary-button" type="button" disabled>
@@ -60,7 +60,7 @@ export default async function ProductDetailPage({ params }) {
             </button>
           )}
           <form action={changeWatchlist.bind(null, id)}>
-            <button type="submit">{watched ? "내 도마에서 빼기" : "내 도마에 담기"}</button>
+            <button type="submit">{watched ? "관심상품에서 삭제" : "관심상품에 추가"}</button>
           </form>
         </div>
       </section>
