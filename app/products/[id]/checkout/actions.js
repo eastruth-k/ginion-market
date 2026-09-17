@@ -16,7 +16,6 @@ export async function completeMockCheckout(productId, previousState, formData) {
     return {
       error: validation.error,
       values: validation.values,
-      completed: false,
       revision: (previousState?.revision ?? 0) + 1,
     };
   }
@@ -30,7 +29,6 @@ export async function completeMockCheckout(productId, previousState, formData) {
     return {
       error: "목업 결제를 완료하지 못했습니다. 잠시 후 다시 시도해주세요.",
       values: validation.values,
-      completed: false,
       revision: (previousState?.revision ?? 0) + 1,
     };
   }
@@ -44,7 +42,6 @@ export async function completeMockCheckout(productId, previousState, formData) {
     return {
       error: errorMessage,
       values: validation.values,
-      completed: false,
       revision: (previousState?.revision ?? 0) + 1,
     };
   }
@@ -54,11 +51,7 @@ export async function completeMockCheckout(productId, previousState, formData) {
   revalidatePath("/mypage");
   revalidatePath("/my-board");
 
-  return {
-    error: "",
-    values: {},
-    completed: true,
-    mockOrderNumber: `MOCK-${purchaseResult.transactionId.slice(-8).toUpperCase()}`,
-    revision: (previousState?.revision ?? 0) + 1,
-  };
+  redirect(
+    `/products/${productId}/checkout/complete?transactionId=${purchaseResult.transactionId}`,
+  );
 }

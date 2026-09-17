@@ -1,14 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import { useActionState } from "react";
 import { completeMockCheckout } from "@/app/products/[id]/checkout/actions";
 
 const initialState = {
   error: "",
   values: {},
-  completed: false,
-  mockOrderNumber: "",
   revision: 0,
 };
 
@@ -19,32 +16,6 @@ export default function CheckoutForm({ productId, buyerName, address }) {
     initialState,
   );
   const values = state.values ?? initialState.values;
-
-  if (state.completed) {
-    return (
-      <section className="mock-payment-complete" aria-live="polite">
-        <span aria-hidden="true">✓</span>
-        <p className="eyebrow">MOCK PAYMENT COMPLETE</p>
-        <h2>목업 결제가 완료되었습니다</h2>
-        <p>
-          실제 금융 결제는 발생하지 않았습니다. 구매 내역은 MYPAGE에
-          기록되었으며 입력한 배송·결제 정보는 저장되지 않았습니다.
-        </p>
-        <dl>
-          <div>
-            <dt>목업 주문번호</dt>
-            <dd>{state.mockOrderNumber}</dd>
-          </div>
-        </dl>
-        <div className="mock-payment-links">
-          <Link href={`/products/${productId}`}>상품으로 돌아가기</Link>
-          <Link className="primary-button" href="/products">
-            다른 상품 보기
-          </Link>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <form
