@@ -40,7 +40,7 @@ export const products = [
     currentPrice: 285000,
     region: "서울특별시 마포구 서교동",
     condition: "최상",
-    status: "예약중",
+    status: "판매중",
     createdAt: new Date("2026-08-29T06:00:00.000Z"),
     sellerId: "66d000000000000000000004",
   },

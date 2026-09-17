@@ -57,7 +57,7 @@ export default async function MyPage() {
         <Link href="#selling">
           <span>판매 관리</span>
           <strong>{activity.sellingCount}</strong>
-          <p>판매중·예약중 상품</p>
+          <p>판매중인 상품</p>
         </Link>
         <Link href="#purchases">
           <span>구매 내역</span>
