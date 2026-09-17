@@ -3,14 +3,14 @@ import Image from "next/image";
 import { connection } from "next/server";
 import DetailProduct from "@/components/DetailProduct";
 import ProductCarousel from "@/app/product-carousel";
-import { getPopularProducts, getSoonProducts } from "@/lib/products";
+import { getPopularProducts, getRecentProducts } from "@/lib/products";
 
 export default async function Home() {
   await connection();
 
-  const [popularProducts, soonProducts] = await Promise.all([
+  const [popularProducts, recentProducts] = await Promise.all([
     getPopularProducts(12),
-    getSoonProducts(12),
+    getRecentProducts(12),
   ]);
 
   return (
@@ -91,16 +91,16 @@ export default async function Home() {
 
 
         {/* =========================
-            곧 썰리는 상품
+            최근 등록상품
         ========================= */}
         <section className="product-section">
 
           <div className="section-header">
 
             <div>
-              <h2>🔪 곧 썰리는 상품</h2>
+              <h2>🆕 최근 등록상품</h2>
               <p>
-                조금만 기다리면 가격이 내려가요.
+                새로 올라온 상품을 먼저 만나보세요.
               </p>
             </div>
 
@@ -112,11 +112,11 @@ export default async function Home() {
 
 
           <ProductCarousel
-            itemCount={soonProducts.length}
-            title="곧 썰리는 상품"
+            itemCount={recentProducts.length}
+            title="최근 등록상품"
           >
 
-            {soonProducts.map((product) => (
+            {recentProducts.map((product) => (
               <DetailProduct
                 key={product._id.toString()}
                 product={product}
