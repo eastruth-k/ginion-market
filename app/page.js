@@ -29,7 +29,7 @@ export default async function Home() {
             />
 
           <div className="hero-content">
-            <p className="hero-label">
+            <p className="eyebrow">
               🔪 대파마켓
             </p>
 
@@ -137,7 +137,7 @@ export default async function Home() {
         <section>
 
           <div>
-            <p>WHY DAEPA MARKET?</p>
+            <p className="eyebrow">WHY DAEPA MARKET?</p>
             <h2>대파마켓이 특별한 이유</h2>
           </div>
 

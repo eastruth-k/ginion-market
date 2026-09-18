@@ -32,11 +32,11 @@ export default async function MockCheckoutCompletePage({ params, searchParams })
         <span aria-hidden="true">✓</span>
         <p className="eyebrow">MOCK PAYMENT COMPLETE</p>
         <h1>목업 결제가 완료되었습니다</h1>
+        <p>실제 금융 결제는 발생하지 않았습니다.</p>
         <p>
-          실제 금융 결제는 발생하지 않았습니다. 구매 내역은 MYPAGE에
-          기록되었으며 입력한 배송·결제 정보는 저장되지 않았습니다.
+          구매 내역은 MYPAGE에 기록되었으며 입력한 배송·결제 정보는 저장되지
+          않았습니다.
         </p>
-
         <div className="checkout-product">
           <Image
             src={product.images[0]}
