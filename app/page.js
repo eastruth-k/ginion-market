@@ -184,19 +184,19 @@ export default async function Home() {
       {/* =========================
           Footer
       ========================= */}
-      <footer>
+      <footer className="site-footer">
 
-        <div>
+        <div className="footer-inner">
 
-          <div>
-            <strong>🥬 대파마켓</strong>
+          <div className="footer-brand">
+            <strong><span aria-hidden="true">🥬</span> 대파마켓</strong>
 
             <p>
               가격은 기다리면 썰립니다. 🔪
             </p>
           </div>
 
-          <nav>
+          <nav aria-label="푸터 메뉴">
             <Link href="/terms">이용약관</Link>
             <Link href="/privacy">개인정보처리방침</Link>
             <Link href="/contact">고객센터</Link>
