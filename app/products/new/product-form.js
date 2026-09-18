@@ -145,7 +145,7 @@ function ImageUpload() {
   );
 }
 
-export default function ProductForm() {
+export default function ProductForm({ categories }) {
   const [state, formAction, pending] = useActionState(
     registerProduct,
     initialState,
@@ -177,12 +177,12 @@ export default function ProductForm() {
       </label>
       <label>
         카테고리
-        <input
-          name="category"
-          defaultValue={values.category}
-          placeholder="전자기기 > 이어폰"
-          required
-        />
+        <select name="category" defaultValue={values.category ?? ""} required>
+          <option value="" disabled>카테고리를 선택해주세요</option>
+          {categories.map((category) => (
+            <option key={category} value={category}>{category}</option>
+          ))}
+        </select>
       </label>
       <label className="wide-field">
         상품 설명

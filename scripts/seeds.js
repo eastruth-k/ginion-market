@@ -178,6 +178,37 @@ function getSeedProductImages(imageName) {
   );
 }
 
+export const categories = [
+  "가구 > 수납가구",
+  "가구 > 의자",
+  "도서 > 자기계발",
+  "반려동물 > 고양이용품",
+  "반려동물 > 이동장",
+  "뷰티 > 스킨케어",
+  "생활 > 주방용품",
+  "생활가전 > 청소기",
+  "생활가전 > 커피머신",
+  "스포츠 > 자전거",
+  "스포츠 > 캠핑",
+  "스포츠 > 홈트레이닝",
+  "식물 > 관엽식물",
+  "유아동 > 완구",
+  "유아동 > 유모차",
+  "전자기기 > 게임기",
+  "전자기기 > 스마트폰",
+  "전자기기 > 이어폰",
+  "전자기기 > 헤드폰",
+  "취미 > 보드게임",
+  "취미 > 악기",
+  "패션 > 가방",
+  "패션 > 신발",
+  "패션 > 여성의류",
+].map((name, index) => ({
+  _id: `66b0000000000000000000${(index + 1).toString(16).padStart(2, "0")}`,
+  name,
+  sortOrder: index + 1,
+}));
+
 export const products = [
   {
     _id: "66e000000000000000000001",
@@ -765,10 +796,7 @@ export const priceChange = [
   ...additionalProductPriceChanges,
 ];
 
-export async function seedDatabase({
-  uri = process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017",
-  databaseName = process.env.MONGODB_DB ?? "daepa_market",
-} = {}) {
+function validateSeedTarget(databaseName) {
   if (process.env.NODE_ENV === "production") {
     throw new Error("운영 환경에서는 개발용 시드를 실행할 수 없습니다.");
   }
@@ -776,11 +804,51 @@ export async function seedDatabase({
   if (["admin", "config", "local"].includes(databaseName)) {
     throw new Error(`${databaseName} 데이터베이스에는 시드를 실행할 수 없습니다.`);
   }
+}
+
+export async function seedProductCategories({
+  uri = process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017",
+  databaseName = process.env.MONGODB_DB ?? "daepa_market",
+} = {}) {
+  validateSeedTarget(databaseName);
+
+  const client = new MongoClient(uri);
+
+  try {
+    await client.connect();
+    const categoryCollection = client.db(databaseName).collection("categories");
+
+    await categoryCollection.createIndex({ name: 1 }, { unique: true });
+    await categoryCollection.createIndex({ sortOrder: 1 });
+
+    for (const category of categories) {
+      await categoryCollection.updateOne(
+        { name: category.name },
+        {
+          $set: { sortOrder: category.sortOrder },
+          $setOnInsert: { _id: new ObjectId(category._id) },
+        },
+        { upsert: true },
+      );
+    }
+
+    console.log(`MongoDB ${databaseName} 데이터베이스에 카테고리 ${categories.length}건을 저장했습니다.`);
+  } finally {
+    await client.close();
+  }
+}
+
+export async function seedDatabase({
+  uri = process.env.MONGODB_URI ?? "mongodb://127.0.0.1:27017",
+  databaseName = process.env.MONGODB_DB ?? "daepa_market",
+} = {}) {
+  validateSeedTarget(databaseName);
 
   const accounts = await createCredentialAccounts();
   const collections = {
     users,
     account: accounts,
+    categories,
     products,
     watchlists,
     transactions,
@@ -813,6 +881,8 @@ export async function seedDatabase({
     }
 
     await database.collection("users").createIndex({ email: 1 }, { unique: true });
+    await database.collection("categories").createIndex({ name: 1 }, { unique: true });
+    await database.collection("categories").createIndex({ sortOrder: 1 });
     await database.collection("account").createIndex({ userId: 1 });
     await database
       .collection("account")
@@ -840,5 +910,9 @@ export async function seedDatabase({
 const executedFile = process.argv[1] ? pathToFileURL(resolve(process.argv[1])).href : "";
 
 if (import.meta.url === executedFile) {
-  await seedDatabase();
+  if (process.argv.includes("--categories-only")) {
+    await seedProductCategories();
+  } else {
+    await seedDatabase();
+  }
 }

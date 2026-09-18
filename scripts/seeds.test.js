@@ -4,6 +4,7 @@ import { join } from "node:path";
 import test from "node:test";
 import { isValidRegionAddress } from "../app/signup/address.js";
 import {
+  categories,
   createCredentialAccounts,
   DEMO_USER_PASSWORD,
   priceChange,
@@ -16,6 +17,7 @@ import {
 const referenceTime = new Date("2026-09-09T06:00:00.000Z");
 
 const expectedFields = {
+  categories: ["_id", "name", "sortOrder"],
   users: [
     "_id",
     "address",
@@ -76,6 +78,7 @@ function getMedian(numbers) {
 
 test("모든 문서는 README에 정의된 필드만 가진다", () => {
   const collections = {
+    categories,
     users,
     products,
     watchlists,
@@ -94,7 +97,14 @@ test("모든 문서는 README에 정의된 필드만 가진다", () => {
 });
 
 test("모든 컬렉션의 ID는 MongoDB ObjectId 문자열 형식이며 중복되지 않는다", () => {
-  const collections = [users, products, watchlists, transactions, priceChange];
+  const collections = [
+    categories,
+    users,
+    products,
+    watchlists,
+    transactions,
+    priceChange,
+  ];
 
   for (const documents of collections) {
     const ids = documents.map((document) => document._id);
@@ -173,6 +183,18 @@ test("시드 상품은 여러 상위 카테고리에 고르게 분포한다", ()
 
   assert.ok(topLevelCategories.size >= 10);
   assert.ok(nonElectronicProducts.length >= 20);
+});
+
+test("상품 카테고리는 카테고리 컬렉션에 등록되어 있다", () => {
+  const categoryNames = categories.map((category) => category.name);
+  const categorySortOrders = categories.map((category) => category.sortOrder);
+
+  assert.equal(new Set(categoryNames).size, categories.length);
+  assert.equal(new Set(categorySortOrders).size, categories.length);
+
+  for (const product of products) {
+    assert.ok(categoryNames.includes(product.category));
+  }
 });
 
 test("관심목록과 거래는 존재하는 회원과 상품만 참조한다", () => {

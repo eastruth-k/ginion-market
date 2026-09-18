@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { isProductCategory } from "@/lib/categories";
 import { deleteProductImages, saveProductImages } from "@/lib/product-images";
 import { createProduct } from "@/lib/products";
 import { validateProductForm } from "@/app/products/product-validation";
@@ -27,6 +28,17 @@ export async function registerProduct(previousState, formData) {
   let savedImages = [];
 
   try {
+    const categoryIsValid = await isProductCategory(
+      validation.productData.category,
+    );
+    if (!categoryIsValid) {
+      return {
+        error: "카테고리를 다시 선택해주세요.",
+        values: validation.values,
+        revision: (previousState?.revision ?? 0) + 1,
+      };
+    }
+
     savedImages = await saveProductImages(
       validation.productData.images,
       session.user.id,

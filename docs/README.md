@@ -127,14 +127,21 @@ updatedAt : 계정 수정일
 `npm run seed`는 업무 데이터와 Better Auth의 account, session, verification 데이터를
 초기화하므로 운영 환경에서는 실행할 수 없다.
 개발용 seed에는 여러 카테고리의 상품 30개와 상품별 이미지 5장이 포함된다.
+기존 개발 데이터를 유지하면서 카테고리만 추가하거나 갱신할 때는
+`npm run categories:seed`를 사용한다.
 
 
+
+[categories:카테고리]
+_id : 고유 키값
+name : 상품 등록과 검색에서 표시할 카테고리 이름
+sortOrder : 선택 목록 표시 순서
 
 [products:상품]
 _id : 고유 키값
 images : 상품이미지(최대 5개, 파일당 5MB 이하)
 name : 상품명
-category : 카테고리
+category : categories 컬렉션에 등록된 카테고리 이름
 info : 상품 설명
 initialPrice : 판매 시작 가격
 minimum : 최저 판매 가격

@@ -10,6 +10,7 @@
     "lint": "eslint",
     "test": "node --test",
     "seed": "node ./scripts/seeds.js",
+    "categories:seed": "node --env-file=.env.local ./scripts/seeds.js --categories-only",
     "prices:adjust": "node --env-file=.env.local ./scripts/adjust-product-prices.js"
   },
   "dependencies": {

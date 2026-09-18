@@ -1,6 +1,7 @@
 import { connection } from "next/server";
 import DetailProduct from "@/components/DetailProduct";
-import { getProductCategories, getProducts } from "@/lib/products";
+import { getProductCategories } from "@/lib/categories";
+import { getProducts } from "@/lib/products";
 
 export default async function ProductsPage({ searchParams }) {
   await connection();
