@@ -266,8 +266,8 @@ header nav a, header nav a:visited{border: none;}
 .legal-page section a { color: var(--green); font-weight: 700; text-decoration: underline; }
 .legal-supplement { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); background: transparent; color: inherit; }
 
-.site-footer { width: 100%; margin-top: 72px; padding-inline: 24px; grid-column: 1 / -1; border-top: 4px solid #56ad73; background: #0b3425; color: #f4fff8; }
-.footer-inner { width: min(1280px, 100%); min-height: 176px; margin: 0 auto; padding-block: 42px 38px; display: flex; align-items: center; justify-content: space-between; gap: 48px; }
+.site-footer { width: 100%; margin-top: 72px; padding-inline: 24px; grid-column: 1 / -1; background: #0b3425; color: #f4fff8; }
+.footer-inner { width: min(1280px, 100%); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 48px; }
 .footer-brand { display: grid; gap: 10px; }
 .footer-brand strong { color: #f4fff8; font-size: 22px; font-weight: 800; letter-spacing: -.02em; }
 .footer-brand strong span { margin-right: 4px; }

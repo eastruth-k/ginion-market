@@ -13,10 +13,10 @@ export default async function NewProductPage() {
   const categories = await getProductCategories();
 
   return (
-    <main>
-      <div>
+    <main className="mypage-page">
+      <div className="page-heading">
         <div>
-          <p>SELL</p>
+          <p className="eyebrow">SELL</p>
           <h1>상품 등록</h1>
         </div>
       </div>
